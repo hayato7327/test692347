@@ -8,12 +8,18 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="/">匿名ブログ</a>
+            <a class="navbar-brand" href="/">野村勇斗ブログ</a>
         </nav>
         <div class="container mt-4">
         {% block main %}
         <p>※コンテンツがありません。</p>
         {% endblock %}
         </div>
+        {% load static %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static 'base_site.css' %}" />
+{% endblock %}
     </body>
 </html>

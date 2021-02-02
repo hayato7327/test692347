@@ -67,8 +67,6 @@ class PostAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
         print("after save")
         
-    class Media:
-        js = ('post.js',)
     
     list_display = ('id', 'title', 'category', 'tags_summary', 'published', 'created', 'updated')
     list_editable = ('title', 'category')

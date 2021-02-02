@@ -25,6 +25,6 @@ admin.site.unregister(Group)
 admin.site.disable_action('delete_selected')
 
 urlpatterns = [
-    path('staff-admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
     path("", include("blog.urls")),
 ]
