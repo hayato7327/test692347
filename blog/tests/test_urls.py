@@ -10,7 +10,7 @@ class TestUrls(TestCase):
          #トップページ/8000に移行するかテスト
          #blog/post_list.htmlを表示するかテスト
     def test_index_url(self):
-        url = reverse('index')
+        url = reverse('blog:index')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         template = 'blog/post_list.html'
@@ -28,7 +28,7 @@ class TestUrls(TestCase):
                     body='test_body', published=1)
         post.save()
         
-        url = reverse('detail', kwargs={'pk': post.pk})
+        url = reverse('blog:detail', kwargs={'pk': post.pk})
         response = self.client.get(url)
         
         self.assertEqual(response.status_code, 200)
@@ -39,7 +39,7 @@ class TestUrls(TestCase):
          #/create/に移行するかテスト
          #blog/post_form.htmlを表示するかテスト
     def test_create_url(self):
-        url = reverse('create')
+        url = reverse('blog:create')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         template = 'blog/post_form.html'
@@ -57,7 +57,7 @@ class TestUrls(TestCase):
                     body='test_body', published=1)
         post.save()
         
-        url = reverse('update', kwargs={'pk': post.pk})
+        url = reverse('blog:update', kwargs={'pk': post.pk})
         response = self.client.get(url)
         
         self.assertEqual(response.status_code, 200)
@@ -76,7 +76,7 @@ class TestUrls(TestCase):
                     body='test_body', published=1)
         post.save()
         
-        url = reverse('delete', kwargs={'pk': post.pk})
+        url = reverse('blog:delete', kwargs={'pk': post.pk})
         response = self.client.get(url)
         
         self.assertEqual(response.status_code, 200)
