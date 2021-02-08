@@ -1,5 +1,13 @@
 {% extends "blog/base.html" %}
 {% block main %}
+
+<h2>会員ページ</h2>
+<p>{{ user }}さん、こんにちは！</p>
+
+<p><a href="{% url 'logout' %}">ログアウト</a></p>
+<p><a href="{% url 'password_change' %}">パスワードの変更</a></p>
+<p><a href="{% url 'password_reset' %}">パスワードを忘れた場合</a></p>
+
 <h2>記事一覧</h2>
 <ol>
     {% for post in object_list %}
