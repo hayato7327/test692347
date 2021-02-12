@@ -139,3 +139,5 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_SSL_REDIRECT = True
 
 AUTH_USER_MODEL = 'registration.User'
+
+FRONTEND_URL = 'https://localhost-login.paiza-user-lite.cloud:8000/'

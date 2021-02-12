@@ -45,8 +45,8 @@ class PostAdminForm(forms.ModelForm):
     
     def clean(self):
         body = self.cleaned_data.get('body')
-        if '<' in body:
-            raise forms.ValidationError('HTMLタグは使えません。')
+        if '<h1>' in body:
+            raise forms.ValidationError('本文にHTMLタグは使えません。')
         
 
 @admin.register(models.Post)
@@ -61,14 +61,10 @@ class PostAdmin(admin.ModelAdmin):
 
     form = PostAdminForm
     filter_horizontal = ('tags',)
-    
-    def save_model(self, request, obj, form, change):
-        print("before save")
-        super().save_model(request, obj, form, change)
-        print("after save")
         
     
     list_display = ('id', 'title', 'category', 'tags_summary', 'published', 'created', 'updated')
+    list_select_related = ('category', )
     list_editable = ('title', 'category')
     search_fields = ('title', 'category__name', 'tags__name', 'created', 'updated')
     ordering = ('-updated', '-created')
@@ -82,7 +78,8 @@ class PostAdmin(admin.ModelAdmin):
     tags_summary.short_description = "tags"
     
     def get_queryset(self, request):
-        return super().get_queryset(request).prefetch_related('tags')
+        qs = super().get_queryset(request)
+        return qs.prefetch_related('tags')
         
     actions = ["publish", "unpublish"]
 
