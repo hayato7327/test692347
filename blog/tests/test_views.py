@@ -1,18 +1,13 @@
 from django.test import TestCase, Client
-from django.contrib.auth.models import AbstractUser
+from django.urls import reverse
+from registration.models import User
 
-
-class TestViewsHome(TestCase):
-
-    def test_not_authenticated(self):
-        client = Client()
-        client.logout()
-        response = client.get('/')
-        self.assertFalse('username' in response.context)
-
+      #ログイン時、ユーザー名nomuraが含まれているか確認 
+class Test_Login(TestCase):
+    
     def test_authenticated(self):
-        client = Client()
-        client.force_login(User.objects.create_user('tester'))
-        response = client.get('/')
-        self.assertTrue('username' in response.context)
-        self.assertEqual(response.context['username'], 'tester')
+        user = User.objects.create_user(username = 'nomura',password = 'adgjm135')
+        self.client.force_login(user)
+        url = reverse('blog:index')
+        response = self.client.get(url)
+        self.assertEqual(user.username, 'nomura')

@@ -1,7 +1,5 @@
 from django.test import TestCase
-from blog.models import Post
-from blog.models import Category
-from blog.models import Tag
+from blog.models import Category, Post, Tag
 
 
 

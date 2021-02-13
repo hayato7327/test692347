@@ -1,12 +1,7 @@
-from django.test import TestCase
-from django.urls import reverse, resolve
-from ..views import Index, Detail, CreateView, Update, Delete
-from blog.models import Category, Post, Tag
 from django.test import TestCase, Client
-from registration.models import User 
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
+from django.urls import reverse
+from blog.models import Category, Post, Tag
+from registration.models import User
                     
                     
 class TestUrls(TestCase):
@@ -15,13 +10,13 @@ class TestUrls(TestCase):
          #トップページ/8000に移行するかテスト
          #blog/post_list.htmlを表示するかテスト
     def test_index_url(self):
-        self.client = Client()
-        user = User.objects.create_user(
-            email = 'hayato.nomura@icloud.com',
-            username = 'admin',
-            password = 'adgjm135')
+        user = User.objects.create_user(username = 'nomura',password = 'adgjm135')
         self.client.force_login(user)
-        self.assertEqual(user.password, 'adgjm135')
+        url = reverse('blog:index')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        template = 'blog:post_list.html'
+        self.assertTemplateUsed(template)
        
         
          #/detail/<pk>/に移行するかテスト
@@ -46,11 +41,6 @@ class TestUrls(TestCase):
          #/create/に移行するかテスト
          #blog/post_form.htmlを表示するかテスト
     def test_create_url(self):
-        self.client = Client()
-        user = User.objects.create_user(
-            username = 'nomura',
-            password = 'adgjm135')
-        self.client.force_login(user=user)
         url = reverse('blog:create')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
