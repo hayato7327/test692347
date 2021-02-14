@@ -1,10 +1,20 @@
 {% extends "base.html" %}
+
 {% block main %}
+
 <h2>ログイン</h2>
-{% include "_form.html" with submit_label="ログイン" %}
-<p><a href="{% url 'signup' %}">サインアップ</a></p>
-<p><a href="{% url 'password_reset' %}">パスワードを忘れた場合</a></p>
+
 <p>8000/adminで管理画面へ</p>
 <p>ユーザー名　admin</p>
 <p>パスワード　adgjm135</p>
+
+{% include "_form.html" with submit_label="ログイン" %}
+<p><a href="{% url 'signup' %}">サインアップ</a></p>
+<p><a href="{% url 'password_reset' %}">パスワードを忘れた場合</a></p>
+
+<h2>このサイトについて</h2>
+
+<p>このサイトは、いま観たドラマの感想をブログ形式で投稿し、それを会員同士で共有
+できるコミュニティです。</p>
+
 {% endblock %}

@@ -12,8 +12,22 @@
 <h2>記事一覧</h2>
 <ol>
     {% for post in object_list %}
-    <li><a href="{% url 'blog:detail' post.id %}">{{ post.title }}</a></li>
-    {% endfor %}
+    
+    <li>
+        <a href="{% url 'blog:detail' post.id %}">{{ post.title }}</a>
+        <button class='like-btn' data-href="{{ blog.get_api_like_url }}">
+          <span class="liked-cnt">{{ blog.like.count }}</span>
+          <i class="fas fa-kiss-wink-heart"></i>
+        </button>
+   </li>
+ <style>
+  p { width: 100px;height: 50px;line-height: 50px;font-size: 30px;color: #F75D5D;text-align: center;background: #fff;border: solid 1px #F75D5D;border-radius: 10px;padding: 10px;}
+  .on { background: #F75D5D; color: #fff; }
+</style>
+
 </ol>
+    {% endfor %}
+
+
 <p><a href="{% url 'blog:create' %}">新規投稿</a></p>
 {% endblock %}

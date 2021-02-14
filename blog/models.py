@@ -1,5 +1,7 @@
 from django.db import models
 from django.urls import reverse_lazy
+from django.urls import reverse
+from django.conf import settings
 
 class Category(models.Model):
     name = models.CharField(
@@ -76,3 +78,24 @@ class Post(models.Model):
         
     def get_absolute_url(self):
         return reverse_lazy("blog:detail", args=[self.id])
+        
+        
+      #いいねボタン実装    
+class LikeButtonModel(models.Model):
+      # ユーザー情報
+    user     = models.ForeignKey(settings.AUTH_USER_MODEL, default=1, on_delete=models.CASCADE)
+    title    = models.CharField(max_length=100)
+    slug     = models.SlugField()
+    body     = models.TextField()
+    date     = models.DateTimeField(auto_now_add=True)
+    thumb    = models.ImageField(default='default.png', blank=True)
+      # いいね情報
+    like     = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='likes')
+
+     #いいねを設置するページのURLを取得する設定
+    def get_absolute_url(self):
+        return reverse('blog:index', kwargs={'slug': self.slug})
+
+     #いいね情報を記録するページの設定
+    def get_api_like_url(self):
+        return reverse('blog:like_api', kwargs={'slug': self.slug})
