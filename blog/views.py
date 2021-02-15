@@ -48,9 +48,6 @@ class Delete(DeleteView):
     success_url = "/"
     
     
-class LikePage(ListView):
-    templatename = 'post_list.html'
-    
     
 class LikeButton(APIView):
     authentication_classes = (authentication.SessionAuthentication,) #ユーザーが認証されているか確認

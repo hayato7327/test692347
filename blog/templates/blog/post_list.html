@@ -19,11 +19,16 @@
           <span class="liked-cnt">{{ blog.like.count }}</span>
           <i class="fas fa-kiss-wink-heart"></i>
         </button>
+        
    </li>
- <style>
-  p { width: 100px;height: 50px;line-height: 50px;font-size: 30px;color: #F75D5D;text-align: center;background: #fff;border: solid 1px #F75D5D;border-radius: 10px;padding: 10px;}
-  .on { background: #F75D5D; color: #fff; }
-</style>
+   
+{% block like %}
+
+<ul class='like'>
+    
+</ul>
+
+{% endblock %}
 
 </ol>
     {% endfor %}
