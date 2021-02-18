@@ -94,8 +94,8 @@ class LikeButtonModel(models.Model):
 
      #いいねを設置するページのURLを取得する設定
     def get_absolute_url(self):
-        return reverse('blog:index', kwargs={'slug': self.slug})
+        return reverse('blog:index', kwargs={"slug": self.slug})
 
      #いいね情報を記録するページの設定
     def get_api_like_url(self):
-        return reverse('blog:like_api', kwargs={'slug': self.slug})
+        return reverse('blog:like_api', kwargs={"slug": self.slug})

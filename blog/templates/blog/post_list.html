@@ -1,5 +1,8 @@
 {% extends "blog/base.html" %}
+
 {% block main %}
+
+{% load static %}
 
 <h2>会員ページ</h2>
 <p>{{ user }}さん、こんにちは！</p>
@@ -10,7 +13,11 @@
 <p>ユーザー名　admin</p>
 <p>パスワード　adgjm135</p>
 <h2>記事一覧</h2>
+
+    <script type='text/javascript' src='{% static "like.js" %}'></script>
+    
 <ol>
+    
     {% for post in object_list %}
     
     <li>
@@ -22,17 +29,8 @@
         
    </li>
    
-{% block like %}
-
-<ul class='like'>
-    
-</ul>
-
-{% endblock %}
-
+   {% endfor %}
 </ol>
-    {% endfor %}
-
-
+   
 <p><a href="{% url 'blog:create' %}">新規投稿</a></p>
 {% endblock %}

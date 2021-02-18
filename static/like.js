@@ -1,21 +1,5 @@
-$(function(){
-  const this_ = $(".like-btn");
-  const likeUrl = this_.attr("data-href"); // ユーザーのステータス情報
-  $.ajax({
-    url: likeUrl,
-    method: "GET",
-    data: {"status":0},　// ユーザーのステータス情報を変更しないように
-    success: function(data){
-      if (data.liked){　// もしユーザーが既にいいねをしていた場合
-          this_.addClass("on");　// ボタンをピンクにする
-      }
-    }, error: function(error){
-      console.log("error")
-    }
-  })
-});
-
 $(".like-btn").click(function(e){
+    window.alert("17行目")
   e.preventDefault()
   const this_ = $(this);
   const like_cnt = $(".liked-cnt");
