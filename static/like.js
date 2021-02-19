@@ -1,16 +1,12 @@
-window.alert("1行目")
 $(".like-btn").click(function(e){
-  window.alert("1")
   e.preventDefault()
-  window.alert("2")
   const this_ = $(this);
-  window.alert("3")
-  const like_cnt = $(".liked-cnt");
-  window.alert(like_cnt)
+  const data_id = this_.attr("data-id")
+  //const like_cnt = $(".liked-cnt");
+  const like_cnt = $("#like"+data_id);
+  //window.alert(like_cnt.text())
   const likeUrl = this_.attr("data-href");
-  window.alert(likeUrl)
   if (likeUrl){
-    window.alert("prepare ajax")
     $.ajax({
       url: likeUrl,
       method: "GET",
@@ -18,8 +14,9 @@ $(".like-btn").click(function(e){
     })
     .then(
       function(data){
-        window.alert("success")
-        let change_like = like_cnt.text();
+        let change_like = Number(like_cnt.text());
+        //window.alert(like_cnt.text())
+        //window.alert(change_like)
         if (data.liked){　//　もしいいねされていなかったら
           like_cnt.text(++change_like);　//　いいねの数を１追加
           this_.addClass("on");　//　ボタンをピンクに
@@ -29,10 +26,10 @@ $(".like-btn").click(function(e){
         }
       },
       function(error){
-        console.log("error")
+        console.log("エラーが発生しました")
       }
     )
   } else {
-    window.alert("else")
+    window.alert("エラーが発生しました。URLが不明です。")
   }
 })

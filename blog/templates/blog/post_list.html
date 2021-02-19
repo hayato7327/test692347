@@ -21,8 +21,8 @@
     
     <li>
         <a href="{% url 'blog:detail' post.id %}">{{ post.title }}</a>
-        <button class='like-btn' data-href="{{ post.get_api_like_url }}">
-          <span class="liked-cnt">{{ post.like.count }}</span>
+        <button class='like-btn' data-href="{{ post.get_api_like_url }}" data-id="{{post.pk}}">
+          <span class="liked-cnt" id="like{{post.pk}}">{{ post.like.count }}</span>
           <i class="fas fa-kiss-wink-heart"></i>
         </button>
         
@@ -32,11 +32,5 @@
 </ol>
    
 <p><a href="{% url 'blog:create' %}">新規投稿</a></p>
-<a href="http://google.com">Google</a>
 <script type='text/javascript' src='{% static "like.js" %}'></script>
-<script type="text/javascript">
-$(function(){
-    $("a[href^='http://']").attr("target","_blank");
-});
-</script>
 {% endblock %}
