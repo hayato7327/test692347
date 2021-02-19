@@ -53,8 +53,8 @@ class LikeButton(APIView):
     authentication_classes = (authentication.SessionAuthentication,) #ユーザーが認証されているか確認
     permission_classes = (permissions.IsAuthenticated,)
 
-    def get(self, request, slug=None, format=None):
-        obj = get_object_or_404(LikeButtonModel, slug=slug) #いいねボタンを設置しているページの情報取得
+    def get(self, request, pk=None, format=None):
+        obj = get_object_or_404(Post, pk=pk) #いいねボタンを設置しているページの情報取得
         url_ = obj.get_absolute_url() #いいねボタンを設置しているページのURL取得
         status = request.GET.getlist('status') #後半戦で説明
         status = bool(int(status[0])) 

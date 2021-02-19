@@ -56,7 +56,8 @@ class PostAdmin(admin.ModelAdmin):
         (None, {'fields': ('title', )}),
         ('コンテンツ', {'fields': ('body', )}),
         ('分類', {'fields': ('category', 'tags')}),
-        ('メタ', {'fields': ('created', 'updated')})
+        ('メタ', {'fields': ('created', 'updated')}),
+        ("その他", {'fields': ('like',)})
     ]
 
     form = PostAdminForm

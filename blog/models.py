@@ -72,12 +72,22 @@ class Post(models.Model):
         default=True,
         verbose_name="公開する"
     )
+      # いいね情報
+    like = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='post_like')
+
+     #いいねを設置するページのURLを取得する設定
+    def get_absolute_url(self):
+        return reverse('blog:index')
+
+     #いいね情報を記録するページの設定
+    def get_api_like_url(self):
+        return reverse('blog:like_api', kwargs={"pk": self.pk})
 
     def __str__(self):
         return self.title
         
-    def get_absolute_url(self):
-        return reverse_lazy("blog:detail", args=[self.id])
+    #def get_absolute_url(self):
+    #    return reverse_lazy("blog:detail", args=[self.id])
         
         
       #いいねボタン実装    
