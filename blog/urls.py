@@ -2,7 +2,7 @@ from django.urls import path
 from . import views
 from django.conf.urls import url
 from django.contrib import admin
-from .views import (LikeButton,)
+from .views import LikeButton
 
 
 app_name = 'blog'
@@ -13,5 +13,5 @@ urlpatterns = [
     path('update/<int:pk>/', views.Update.as_view(), name="update"),
     path('delete/<int:pk>/', views.Delete.as_view(), name="delete"),
      #いいね情報を格納するページ
-    path('', LikeButton.as_view(), name='like_api'),
+    path('like/<int:pk>/', LikeButton.as_view(), name='like_api'),
 ]
