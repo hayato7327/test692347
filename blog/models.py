@@ -84,10 +84,7 @@ class Post(models.Model):
         return reverse('blog:like_api', kwargs={"pk": self.pk})
 
     def __str__(self):
-        return self.title
-        
-    #def get_absolute_url(self):
-    #    return reverse_lazy("blog:detail", args=[self.id])
+        return self.titles
         
         
       #いいねボタン実装    

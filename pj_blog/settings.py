@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog',
     'rest_framework',
+    'fontawesome-free',
 ]
 
 MIDDLEWARE = [
@@ -141,4 +142,4 @@ SECURE_SSL_REDIRECT = False
 
 AUTH_USER_MODEL = 'registration.User'
 
-FRONTEND_URL = 'https://localhost-login.paiza-user-lite.cloud:8000/'
+FRONTEND_URL = 'http://127.0.0.1:8000/'
