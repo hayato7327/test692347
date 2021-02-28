@@ -8,11 +8,11 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 User = get_user_model()
 
-subject = "登録確認"
+subject = "ブログ共有コミュニティ登録確認"
 message_template = """
 ご登録ありがとうございます。
 以下URLをクリックして登録を完了してください。
-
+身に覚えの無いメールの場合は無視して下さい。
 """
 
 def get_activate_url(user):

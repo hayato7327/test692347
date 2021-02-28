@@ -4,15 +4,15 @@
 
 {% load static %}
 
-<h2>会員ページ</h2>
-<p>{{ user }}さん、こんにちは！</p>
+<h2>⭐︎ 会員ページ ⭐︎</h2>
+<p>{{ user }}さん、こんにちは😊</p>
 
 <p><a href="{% url 'logout' %}">ログアウト</a></p>
 <p><a href="{% url 'password_change' %}">パスワードの変更</a></p>
 <p>8000/adminで管理画面へ</p>
 <p>ユーザー名　admin</p>
 <p>パスワード　adgjm135</p>
-<h2>記事一覧</h2>
+<h2>⭐︎ ブログ一覧 ⭐︎</h2>
 
     
 <ol>
@@ -21,34 +21,31 @@
     
     <li>
         <a href="{% url 'blog:detail' post.id %}">{{ post.title }}</a>
-        <button class='like-btn' data-href="{{ post.get_api_like_url }}" data-id="{{post.pk}}">
+        <button class='like-btn {%if request.user in post.like.all %}on{%endif%}'
+                       data-href="{{ post.get_api_like_url }}" data-id="{{post.pk}}">
           <span class="liked-cnt" id="like{{post.pk}}">{{ post.like.count }}</span>
-          <i class="fas fa-kiss-wink-heart"></i>
+          <i class="fas fa-thumbs-up"></i>
         </button>
         
    </li>
-   
+
    {% endfor %}
+
 </ol>
    
 <p><a href="{% url 'blog:create' %}">新規投稿</a></p>
 <script type='text/javascript' src='{% static "like.js" %}'></script>
 <link href="{% static 'fontawesome_free/css/all.min.css' %}" rel="stylesheet" type="text/css">
 <style>
-  button.like-btn{ 
-    width: 40px;
-    height: 40px;
-    line-height: 0px;
-    font-size: 15px;
-    color: #F75D5D;
-    background: #fff;
-    border: solid 1px #F75D5D;
-    border-radius: 10px;
-    padding: 5px;
+  button.like-btn{
+    color: #999999;
+    line-height:40px;
+    background-color: transparent;
+    border: none;
+    outline: none;
   }
-  button.on { 
-    background: #F75D5D; 
-    color: #fff; 
+  button.on{
+    color: #F75D5D;
   }
 </style>
 

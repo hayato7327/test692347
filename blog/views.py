@@ -3,43 +3,34 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
 from django.contrib.auth.models import User
-from .models import LikeButtonModel
-
-
-# ListViewとDetailViewを取り込み
 from django.views.generic import ListView, DetailView
-
-# 自分で作ったPostモデルを取り込み
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Post
 
-# 一覧
+
 class Index(ListView):
-    # 一覧するモデルを指定 -> `object_list`で取得可能
     model = Post
 
-# 個別
+
 class Detail(DetailView):
-    # 詳細表示するモデルを指定 -> `object`で取得可能
     model = Post
+    def get_template_names(self):
+        if self.object.accessuser == self.request.user:
+            template_name = 'post_detail.html'
+        else:
+            template_name = 'blog/invalid.html'
+        return template_name
     
-
-from django.views.generic.edit import CreateView
 
 class Create(CreateView):
     model = Post
-    
-    # 編集対象にするフィールド
     fields = ["title", "body", "category", "tags"]
-    
 
-from django.views.generic.edit import UpdateView
 
 class Update(UpdateView):
     model = Post
     fields = ["title", "body", "category", "tags"]
     
-    
-from django.views.generic.edit import DeleteView
 
 class Delete(DeleteView):
     model = Post

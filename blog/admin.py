@@ -57,7 +57,8 @@ class PostAdmin(admin.ModelAdmin):
         ('コンテンツ', {'fields': ('body', )}),
         ('分類', {'fields': ('category', 'tags')}),
         ('メタ', {'fields': ('created', 'updated')}),
-        ("その他", {'fields': ('like',)})
+        ("いいね", {'fields': ('like',)}),
+        ("投稿者", {'fields': ('accessuser',)})
     ]
 
     form = PostAdminForm
@@ -93,7 +94,3 @@ class PostAdmin(admin.ModelAdmin):
         queryset.update(published=False)
         
     unpublish.short_description = "下書きに戻す"
-    
-@admin.register(models.LikeButtonModel)
-class LikeButtonModelAdmin(admin.ModelAdmin):
-    pass
