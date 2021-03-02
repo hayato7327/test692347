@@ -136,14 +136,19 @@ LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/login/"
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+ #Trueでリクエストの全てをhttpsに変える。テスト時はhttp通信のため、Falseにしないとエラーになる
 SECURE_SSL_REDIRECT = False
 
+ #会員登録ルールを指定
 AUTH_USER_MODEL = 'registration.User'
 
+ #開発用のURLを記載(ターミナルに表示される)
 FRONTEND_URL = 'http://127.0.0.1:8000/'
 
+ #会員登録メール送信サーバーはSendGridを使用
 EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'sgqj97yj@kke.com'
-EMAIL_HOST_PASSWORD = 'adgjm135'
+EMAIL_HOST_USER = 'apikey'
+EMAIL_HOST_PASSWORD = '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'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True

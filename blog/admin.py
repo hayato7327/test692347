@@ -49,6 +49,7 @@ class PostAdminForm(forms.ModelForm):
             raise forms.ValidationError('本文にHTMLタグは使えません。')
         
 
+                                                      #fieldsetsに指定すれば管理画面の項目に追加できる
 @admin.register(models.Post)
 class PostAdmin(admin.ModelAdmin):
     readonly_fields = ('created', 'updated')

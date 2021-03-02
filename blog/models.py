@@ -74,7 +74,7 @@ class Post(models.Model):
         default=True,
         verbose_name="公開する"
     )
-
+                                            #ForeignKeyの引数は紐付けたい項目(今回はユーザーIDを持たせたいからregistration/models/User)
     accessuser = models.ForeignKey(
         User,
         blank=True,

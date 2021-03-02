@@ -14,11 +14,16 @@ class Index(ListView):
 
 class Detail(DetailView):
     model = Post
+                                                             #get_template_names関数は動的にtemplate_nameを指定できる
+                                                             #もし、Detail.objectのaccessuser(modelsで定義)が、Detailにログインしてるユーザーと一致したら、
+                                                             #編集削除ができる通常の移行先、post_detail.htmlを表示させる
+                                                             #違ったら、編集削除ができないhtml(other_user_detail.html)を表示
+     #ユーザーIDにより処理を変化
     def get_template_names(self):
         if self.object.accessuser == self.request.user:
-            template_name = 'post_detail.html'
+            template_name = 'blog/post_detail.html'
         else:
-            template_name = 'blog/invalid.html'
+            template_name = 'blog/other_user_detail.html'
         return template_name
     
 
@@ -26,14 +31,42 @@ class Create(CreateView):
     model = Post
     fields = ["title", "body", "category", "tags"]
 
+                                                       #form_validはフォームバリデーションに問題がなかった時に行う処理を記述する関数
+                                                       #入力フォームを仮セーブし、そのフォームをPOSTしてきたユーザをaccessuserに入れて、
+                                                       # accessuserとログインユーザーが一緒だったらデータベースに本セーブし、
+                                                       #returnでform_validを親クラスのCreateに返す。親クラスに返すときはsuper()が必要
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.accessuser = self.request.user
+        post.save()
+        return super().form_valid(form)
+
 
 class Update(UpdateView):
     model = Post
     fields = ["title", "body", "category", "tags"]
+
+     #もし投稿者じゃないユーザーがURLを直接指定してきて、投稿者じゃないのに編集画面に入ろうとしたら、悪意あるユーザーと判断し「無効なリンクです」と表示させる
+    def get_template_names(self):
+        if self.object.accessuser == self.request.user:
+            template_name = 'blog/post_form.html'
+
+        else:
+            template_name = 'blog/invalid.html'
+        return template_name
     
 
 class Delete(DeleteView):
     model = Post
+
+     #もし投稿者じゃないユーザーがURLを直接指定してきて、投稿者じゃないのに削除画面に入ろうとしたら、悪意あるユーザーと判断し「無効なリンクです」と表示させる
+    def get_template_names(self):
+        if self.object.accessuser == self.request.user:
+            template_name = 'blog/post_confirm_delete.html'
+
+        else:
+            template_name = 'blog/invalid.html'
+        return template_name
     
     # 削除したあとに移動する先（トップページ）
     success_url = "/"
