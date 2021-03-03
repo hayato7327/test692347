@@ -15,12 +15,17 @@ class Index(ListView):
 
 class Search(ListView):
     model = Post
-    def query_set(self):
+
+     #検索関数  queryは設置html、post_list.htmlで定義
+    def get_queryset(self):
         q_word = self.request.GET.get('query')
         if q_word:
             object_list = Post.objects.filter(
+                 #icontains = 部分一致
                 Q(title__icontains=q_word) | 
                 Q(body__icontains=q_word))
+
+         #もしフォームに何も入力せずに検索ボタン押したら、何も起こらない(ボタン押下前同様、投稿全表示)
         else:
             object_list = Post.objects.all()
         return object_list

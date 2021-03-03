@@ -7,10 +7,11 @@
 {% load static %}
 
 <h2>{{ object.title }}</h2>
+<p>投稿者：{{ post.accessuser }}</p>
 <p>更新日時：<time>{{ object.updated|localtime|localize }}</time></p>
-<div>
-    {{ object.body }}
-</div>
+
+<h4>{{ object.body }}</h4>
+
 <button class='like-btn {%if request.user in post.like.all %}on{%endif%}'
                        data-href="{{ post.get_api_like_url }}" data-id="{{post.pk}}">
           <span class="liked-cnt" id="like{{post.pk}}">{{ post.like.count }}</span>

@@ -8,7 +8,7 @@ from .views import LikeButton
 app_name = 'blog'
 urlpatterns = [
     path('', views.Index.as_view(), name="index"),
-    path('search', views.Search.as_view(), name='search'),
+    path('search/', views.Search.as_view(), name='search'),
     path('detail/<int:pk>/', views.Detail.as_view(), name="detail"),
     path('create/', views.Create.as_view(), name="create"),
     path('update/<int:pk>/', views.Update.as_view(), name="update"),

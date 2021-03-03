@@ -5,7 +5,7 @@
 {% for post in object_list %}
     
     <li>
-        <a href="{% url 'blog:detail' post.id %}">{{ post.title }}</a> <p>投稿者：{{ post.accessuser }}</p>
+        <a href="{% url 'blog:detail' post.id %}">{{ post.title }}</a> <p>投稿者あ：{{ post.accessuser }}</p>
 
          <!--もしいいねしていたユーザーがログインユーザーだったら、いいねボタンを光らせる-->
          <!--これにより、リロードしたり再度ログイン時、いいねしたボタンは常に光る-->
