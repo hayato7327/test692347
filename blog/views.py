@@ -6,10 +6,24 @@ from django.contrib.auth.models import User
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Post
+from django.db.models import Q
 
 
 class Index(ListView):
     model = Post
+
+
+class Search(ListView):
+    model = Post
+    def query_set(self):
+        q_word = self.request.GET.get('query')
+        if q_word:
+            object_list = Post.objects.filter(
+                Q(title__icontains=q_word) | 
+                Q(body__icontains=q_word))
+        else:
+            object_list = Post.objects.all()
+        return object_list
 
 
 class Detail(DetailView):

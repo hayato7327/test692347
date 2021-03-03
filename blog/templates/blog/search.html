@@ -1,0 +1,22 @@
+{% extends "blog/base.html" %}
+
+{% block main %}
+
+{% for post in object_list %}
+    
+    <li>
+        <a href="{% url 'blog:detail' post.id %}">{{ post.title }}</a> <p>投稿者：{{ post.accessuser }}</p>
+
+         <!--もしいいねしていたユーザーがログインユーザーだったら、いいねボタンを光らせる-->
+         <!--これにより、リロードしたり再度ログイン時、いいねしたボタンは常に光る-->
+        <button class='like-btn {%if request.user in post.like.all %}on{%endif%}'
+                       data-href="{{ post.get_api_like_url }}" data-id="{{post.pk}}">
+          <span class="liked-cnt" id="like{{post.pk}}">{{ post.like.count }}</span>
+          <i class="fas fa-thumbs-up"></i>
+        </button>
+        
+   </li>
+
+   {% endfor %}
+
+{% endblock %}
