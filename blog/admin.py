@@ -5,8 +5,8 @@ from . import models
 
 
 class PostTitleFilter(admin.SimpleListFilter):
-    title = '本文'
-    parameter_name = 'body_contains'
+    title = "本文"
+    parameter_name = "body_contains"
 
     def queryset(self, request, queryset):
         if self.value() is not None:
@@ -23,7 +23,7 @@ class PostTitleFilter(admin.SimpleListFilter):
 
 class PostInline(admin.TabularInline):
     model = models.Post
-    fields = ('title', 'body')
+    fields = ("title", "body")
     extra = 1
 
 
@@ -40,38 +40,38 @@ class TagAdmin(admin.ModelAdmin):
 class PostAdminForm(forms.ModelForm):
     class Meta:
         labels = {
-            'title': 'ブログタイトル'
+            "title": "ブログタイトル"
         }
     
     def clean(self):
-        body = self.cleaned_data.get('body')
-        if '<h1>' in body:
-            raise forms.ValidationError('本文にHTMLタグは使えません。')
+        body = self.cleaned_data.get("body")
+        if "死" in body:
+            raise forms.ValidationError("不適切な単語が含まれています")
         
 
-                                                      #fieldsetsに指定すれば管理画面の項目に追加できる
 @admin.register(models.Post)
 class PostAdmin(admin.ModelAdmin):
-    readonly_fields = ('created', 'updated')
+    readonly_fields = ("created", "updated")
+     #fieldsetsに指定すれば管理画面の項目に追加できる
     fieldsets = [
-        (None, {'fields': ('title', )}),
-        ('コンテンツ', {'fields': ('body', )}),
-        ('分類', {'fields': ('category', 'tags')}),
-        ('メタ', {'fields': ('created', 'updated')}),
-        ("いいね", {'fields': ('like',)}),
-        ("投稿者", {'fields': ('accessuser',)})
+        (None, {"fields": ("title", )}),
+        ("コンテンツ", {"fields": ("body", )}),
+        ("分類", {"fields": ("category", "tags")}),
+        ("メタ", {"fields": ("created", "updated")}),
+        ("いいね", {"fields": ("like",)}),
+        ("投稿者", {"fields": ("accessuser",)})
     ]
 
     form = PostAdminForm
-    filter_horizontal = ('tags',)
+    filter_horizontal = ("tags",)
         
     
-    list_display = ('id', 'title', 'category', 'tags_summary', 'published', 'created', 'updated')
-    list_select_related = ('category', )
-    list_editable = ('title', 'category')
-    search_fields = ('title', 'category__name', 'tags__name', 'created', 'updated')
-    ordering = ('-updated', '-created')
-    list_filter = (PostTitleFilter, 'category', 'tags', 'created', 'updated')
+    list_display = ("id", "title", "category", "tags_summary", "published", "created", "updated")
+    list_select_related = ("category", )
+    list_editable = ("title", "category")
+    search_fields = ("title", "category__name", "tags__name", "created", "updated")
+    ordering = ("-updated", "-created")
+    list_filter = (PostTitleFilter, "category", "tags", "created", "updated")
     
     def tags_summary(self, obj):
         qs = obj.tags.all()
@@ -82,7 +82,7 @@ class PostAdmin(admin.ModelAdmin):
     
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.prefetch_related('tags')
+        return qs.prefetch_related("tags")
         
     actions = ["publish", "unpublish"]
 

@@ -5,7 +5,7 @@ from django.contrib import admin
 from .views import LikeButton
 
 
-app_name = 'blog'
+app_name = 'blog' #アプリが複数ある時は、どのアプリのurlを指定してるかわかるようにapp_nameを指定する
 urlpatterns = [
     path('', views.Index.as_view(), name="index"),
     path('search/', views.Search.as_view(), name='search'),

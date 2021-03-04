@@ -1,0 +1,10 @@
+ button.like-btn{
+    color: #999999;
+    line-height:40px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+  }
+  button.on{
+    color: #F75D5D;
+  }

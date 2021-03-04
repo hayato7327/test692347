@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block content %}
+{% block content %} <!--djangoデフォルトからextendsでhtml取得してる。そのベースhtmlではcontentで指定されてるからcontentでないとエラー-->
 
 <link rel="stylesheet" type="text/css" href="{% static 'base_site.css' %}" />
 <form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}

@@ -1,5 +1,4 @@
 from django.db import models
-from django.urls import reverse_lazy
 from django.urls import reverse
 from django.conf import settings
 from registration.models import User
@@ -55,7 +54,6 @@ class Post(models.Model):
         blank=True,
         null=False,
         verbose_name="本文",
-        help_text="HTMLタグは使えません。"
     )
 
     category = models.ForeignKey(
@@ -74,27 +72,27 @@ class Post(models.Model):
         default=True,
         verbose_name="公開する"
     )
-                                            #ForeignKeyの引数は紐付けたい項目(今回はユーザーIDを持たせたいからregistration/models/User)
+     #ForeignKeyの引数は紐付けたい項目(今回はユーザーIDを持たせたいからregistration/models/User)
     accessuser = models.ForeignKey(
         User,
         blank=True,
         null=True,
         on_delete=models.CASCADE,
     )
-      # いいね情報
+     # いいね情報
     like = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         blank=True,
-        related_name='post_like'
+        related_name="post_like"
     )
 
-     #いいねを設置するページのURLを取得する設定
+     #投稿ボタン押した先に移行するhtmlの設定
     def get_absolute_url(self):
-        return reverse('blog:index')
+        return reverse("blog:index")
 
      #いいね情報を記録するページの設定
     def get_api_like_url(self):
-        return reverse('blog:like_api', kwargs={"pk": self.pk})
+        return reverse("blog:like_api", kwargs={"pk": self.pk})
 
     def __str__(self):
         return self.title

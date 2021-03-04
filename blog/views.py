@@ -16,49 +16,38 @@ class Index(ListView):
 class Search(ListView):
     model = Post
 
-     #検索関数  queryは設置html、post_list.htmlで定義
-    def get_queryset(self):
+    def get_queryset(self): #検索関数  queryは設置html、post_list.htmlで定義
         q_word = self.request.GET.get('query')
         if q_word:
             object_list = Post.objects.filter(
-                 #icontains = 部分一致
-                Q(title__icontains=q_word) | 
+                Q(title__icontains=q_word) |  #icontains = 部分一致
                 Q(body__icontains=q_word))
-
-         #もしフォームに何も入力せずに検索ボタン押したら、何も起こらない(ボタン押下前同様、投稿全表示)
         else:
-            object_list = Post.objects.all()
+            object_list = Post.objects.all() #もしフォームに何も入力せずに検索ボタン押したら、何も起こらない(ボタン押下前同様、投稿全表示)
         return object_list
 
 
 class Detail(DetailView):
-    model = Post
-                                                             #get_template_names関数は動的にtemplate_nameを指定できる
-                                                             #もし、Detail.objectのaccessuser(modelsで定義)が、Detailにログインしてるユーザーと一致したら、
-                                                             #編集削除ができる通常の移行先、post_detail.htmlを表示させる
-                                                             #違ったら、編集削除ができないhtml(other_user_detail.html)を表示
+    model = Post                                             
+                                                             
      #ユーザーIDにより処理を変化
-    def get_template_names(self):
-        if self.object.accessuser == self.request.user:
-            template_name = 'blog/post_detail.html'
+    def get_template_names(self): #get_template_names関数は動的にtemplate_nameを指定できる
+        if self.object.accessuser == self.request.user: #もし、Detail.objectのaccessuser(modelsで定義)が、Detailにログインしてるユーザーと一致したら
+            template_name = 'blog/post_detail.html' #編集削除ができる通常の移行先、post_detail.htmlを表示させる
         else:
-            template_name = 'blog/other_user_detail.html'
+            template_name = 'blog/other_user_detail.html' #違ったら、編集削除ができないhtml(other_user_detail.html)を表示
         return template_name
     
 
 class Create(CreateView):
     model = Post
     fields = ["title", "body", "category", "tags"]
-
-                                                       #form_validはフォームバリデーションに問題がなかった時に行う処理を記述する関数
-                                                       #入力フォームを仮セーブし、そのフォームをPOSTしてきたユーザをaccessuserに入れて、
-                                                       # accessuserとログインユーザーが一緒だったらデータベースに本セーブし、
-                                                       #returnでform_validを親クラスのCreateに返す。親クラスに返すときはsuper()が必要
-    def form_valid(self, form):
-        post = form.save(commit=False)
-        post.accessuser = self.request.user
-        post.save()
-        return super().form_valid(form)
+                                                            
+    def form_valid(self, form): #form_validはフォームバリデーションに問題がなかった時に行う処理を記述する関数
+        post = form.save(commit=False) #入力フォームを仮セーブし
+        post.accessuser = self.request.user #そのフォームをPOSTしてきたユーザをaccessuserに入れて、accessuserとログインユーザーが一緒だったら
+        post.save() # データベースに本セーブする
+        return super().form_valid(form) #returnでform_validを親クラスのCreateに返す。親クラスに返すときはsuper()が必要
 
 
 class Update(UpdateView):
