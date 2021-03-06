@@ -17,7 +17,7 @@ class Search(ListView):
     model = Post
 
     def get_queryset(self): #検索関数  queryは設置html、post_list.htmlで定義
-        q_word = self.request.GET.get('query')
+        q_word = self.request.GET.get("query")
         if q_word:
             object_list = Post.objects.filter(
                 Q(title__icontains=q_word) |  #icontains = 部分一致
@@ -33,9 +33,9 @@ class Detail(DetailView):
      #ユーザーIDにより処理を変化
     def get_template_names(self): #get_template_names関数は動的にtemplate_nameを指定できる
         if self.object.accessuser == self.request.user: #もし、Detail.objectのaccessuser(modelsで定義)が、Detailにログインしてるユーザーと一致したら
-            template_name = 'blog/post_detail.html' #編集削除ができる通常の移行先、post_detail.htmlを表示させる
+            template_name = "blog/post_detail.html" #編集削除ができる通常の移行先、post_detail.htmlを表示させる
         else:
-            template_name = 'blog/other_user_detail.html' #違ったら、編集削除ができないhtml(other_user_detail.html)を表示
+            template_name = "blog/other_user_detail.html" #違ったら、編集削除ができないhtml(other_user_detail.html)を表示
         return template_name
     
 
@@ -57,10 +57,10 @@ class Update(UpdateView):
      #もし投稿者じゃないユーザーがURLを直接指定してきて、投稿者じゃないのに編集画面に入ろうとしたら、悪意あるユーザーと判断し「無効なリンクです」と表示させる
     def get_template_names(self):
         if self.object.accessuser == self.request.user:
-            template_name = 'blog/post_form.html'
+            template_name = "blog/post_form.html"
 
         else:
-            template_name = 'blog/invalid.html'
+            template_name = "blog/invalid.html"
         return template_name
     
 
@@ -70,10 +70,10 @@ class Delete(DeleteView):
      #もし投稿者じゃないユーザーがURLを直接指定してきて、投稿者じゃないのに削除画面に入ろうとしたら、悪意あるユーザーと判断し「無効なリンクです」と表示させる
     def get_template_names(self):
         if self.object.accessuser == self.request.user:
-            template_name = 'blog/post_confirm_delete.html'
+            template_name = "blog/post_confirm_delete.html"
 
         else:
-            template_name = 'blog/invalid.html'
+            template_name = "blog/invalid.html"
         return template_name
     
     # 削除したあとに移動する先（トップページ）
@@ -88,7 +88,7 @@ class LikeButton(APIView):
     def get(self, request, pk=None, format=None):
         obj = get_object_or_404(Post, pk=pk) #いいねボタンを設置しているページの情報取得
         url_ = obj.get_absolute_url() #いいねボタンを設置しているページのURL取得
-        status = request.GET.getlist('status') #後半戦で説明
+        status = request.GET.getlist("status")
         status = bool(int(status[0])) 
         user = self.request.user #ユーザー情報の取得
         if user in obj.like.all(): #ユーザーがいいねをしていた場合
@@ -107,6 +107,3 @@ class LikeButton(APIView):
             "liked": liked,
         }
         return Response(data)
-
-    
-    

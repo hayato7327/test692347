@@ -8,7 +8,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 User = get_user_model()
 
-subject = "ブログ共有コミュニティ登録確認"
+subject = "ドラマブログ共有コミュニティ登録確認"
 message_template = """
 ご登録ありがとうございます。
 以下URLをクリックして登録を完了してください。

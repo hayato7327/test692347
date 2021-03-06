@@ -11,7 +11,12 @@
 <p>更新日時：<time>{{ object.updated|localtime|localize }}</time></p>
 
 <h4>{{ object.body }}</h4>
-<p>{{ object.tags }}</p>
+
+{% for tag in object.tags.all %}
+
+<p>{{ tag.name }}</p>
+
+{% endfor %}
 
 <button class="like-btn {%if request.user in post.like.all %}on{%endif%}"
                        data-href="{{ post.get_api_like_url }}" data-id="{{post.pk}}">
