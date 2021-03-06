@@ -59,7 +59,7 @@ class Post(models.Model):
     category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE,
-        verbose_name="カテゴリ"
+        verbose_name="カテゴリー"
     )
         
     tags = models.ManyToManyField(

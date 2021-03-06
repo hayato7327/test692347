@@ -7,16 +7,17 @@
 {% load static %}
 
 <h2>{{ object.title }}</h2>
+
+<h4><p>{{ object.body }}</h4></p>
+
 <p>投稿者：{{ post.accessuser }}</p>
+
+<p>選択されたカテゴリー:{% for categorys in object.category.all %} {{ categorys.name }} {% endfor %}</p>
+
+ <!--tag=自由に決めた値 tagにmodels.pyのtagsを全て入れて、そのtagの中のname(models.py Tag内の変数)を表示-->
+<p>選択されたタグ:{% for tag in object.tags.all %} 「{{ tag.name }}」 {% endfor %}</p>
+
 <p>更新日時：<time>{{ object.updated|localtime|localize }}</time></p>
-
-<h4>{{ object.body }}</h4>
-
-{% for tag in object.tags.all %}
-
-<p>{{ tag.name }}</p>
-
-{% endfor %}
 
 <button class="like-btn {%if request.user in post.like.all %}on{%endif%}"
                        data-href="{{ post.get_api_like_url }}" data-id="{{post.pk}}">
