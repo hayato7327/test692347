@@ -27,6 +27,37 @@ class Search(ListView):
         return object_list
 
 
+class SearchCategory(ListView):
+    model = Post
+
+    def get_context_data(self, *args, **kwargs):
+        searchform = SearchForm()
+        post_list = Post.objects.all()
+        params = {
+            'searchform': searchform,
+            'post_list': post_list,
+            }
+        return params
+
+
+class Search(request):
+    if request.method == 'POST':
+        form = SearchForm(request.POST)
+
+        if form.is_valid():
+            selected_category = form.cleaned_data['selected_category']
+            # selected_category =  request.POST.get('selected_category', None)
+            # ↑これも試しましたが、やはり検索できずに全件出てきます。
+            freeword = form.cleaned_data['freeword']
+            search_list = Post.objects.filter(Q(category__category=selected_category))
+
+    params = {
+        'search_list': search_list,
+        }
+
+    return render (request, 'posts/search.html', params)
+
+
 class Detail(DetailView):
     model = Post                                             
                                                              
