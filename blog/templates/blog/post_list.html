@@ -24,16 +24,16 @@
           placeholder="タイトル、本文からワード検索" style="width:250px;">
    <button type="submit" class="btn btn-primary">検索</button>
 
-   <form action="{% url 'blog:search_category' %}" method="POST" novalidate="novalidate">
-    <select class="form-control search-slt">
-    <option value="none">カテゴリ</option>
+   <form class="form-inline my-2" method="GET" action="{% url 'blog:search_category' %}">
+    <input type="context" class="form-control" name="category_list" value="{{request.GET.query_cate}}">
+    <button type="submit" class="btn btn-primary">検索</button>
     {% for item in category_list %}
+    <select name="cate_list">
         <option name="selected_category" value="{{ item.category }}">{{ item.category }}</option>
+    </select>
     {% endfor %}
     </select>
 
-    <input type="search" class="form-control search-slt" name="freeword">
-    <button type="submit" class="btn btn-danger wrn-btn">Search</button>
     {% csrf_token %}
 </form>
 </div>

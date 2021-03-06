@@ -29,33 +29,25 @@ class Search(ListView):
 
 class SearchCategory(ListView):
     model = Post
+    context_object_name = 'post_list'
+    queryset = Post.objects.order_by('-created_date')
+    model = Post
+    paginate_by = 7
+
+    def get_queryset(self): #検索関数  queryは設置html、post_list.htmlで定義
+        q_word = self.request.GET.get("query_cate")
+        if q_word:
+            object_list = Category.objects.filter(
+                Q(title__icontains=q_word) |  #icontains = 部分一致
+                Q(body__icontains=q_word))
+        else:
+            object_list = Post.objects.all() #もしフォームに何も入力せずに検索ボタン押したら、何も起こらない(ボタン押下前同様、投稿全表示)
+        return object_list
 
     def get_context_data(self, *args, **kwargs):
-        searchform = SearchForm()
-        post_list = Post.objects.all()
-        params = {
-            'searchform': searchform,
-            'post_list': post_list,
-            }
-        return params
-
-
-class Search(request):
-    if request.method == 'POST':
-        form = SearchForm(request.POST)
-
-        if form.is_valid():
-            selected_category = form.cleaned_data['selected_category']
-            # selected_category =  request.POST.get('selected_category', None)
-            # ↑これも試しましたが、やはり検索できずに全件出てきます。
-            freeword = form.cleaned_data['freeword']
-            search_list = Post.objects.filter(Q(category__category=selected_category))
-
-    params = {
-        'search_list': search_list,
-        }
-
-    return render (request, 'posts/search.html', params)
+        context = super().get_context_data(*args, **kwargs)
+        context['category_list'] = Category.objects.all
+        return context
 
 
 class Detail(DetailView):
