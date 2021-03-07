@@ -5,12 +5,21 @@ from rest_framework import authentication, permissions
 from django.contrib.auth.models import User
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import Post
+from .models import Post, Category, Tag
 from django.db.models import Q
 
 
 class Index(ListView):
     model = Post
+    context_object_name = 'post_list'
+    queryset = Post.objects.order_by('category')
+    model = Post
+    paginate_by = 7
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['category_list'] = Category.objects.all
+        return context
 
 
 class Search(ListView):
@@ -29,10 +38,7 @@ class Search(ListView):
 
 class SearchCategory(ListView):
     model = Post
-    context_object_name = 'post_list'
-    queryset = Post.objects.order_by('-created_date')
-    model = Post
-    paginate_by = 7
+    
 
     def get_queryset(self): #検索関数  queryは設置html、post_list.htmlで定義
         q_word = self.request.GET.get("query_cate")
@@ -43,11 +49,6 @@ class SearchCategory(ListView):
         else:
             object_list = Post.objects.all() #もしフォームに何も入力せずに検索ボタン押したら、何も起こらない(ボタン押下前同様、投稿全表示)
         return object_list
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        context['category_list'] = Category.objects.all
-        return context
 
 
 class Detail(DetailView):
