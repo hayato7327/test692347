@@ -42,9 +42,11 @@ class SearchCategory(ListView):
 
     def get_queryset(self): #検索関数  queryは設置html、post_list.htmlで定義
         q_word = self.request.GET.get("query_cate")
+        print("q_word")
+        print(q_word)
         if q_word:
-            object_list = Category.objects.filter(
-                Q(category__icontains=q_word)#icontains = 部分一致
+            object_list = Post.objects.filter(
+                Q(category__icontains=q_word)) #icontains = 部分一致
         else:
             object_list = Post.objects.all() #もしフォームに何も入力せずに検索ボタン押したら、何も起こらない(ボタン押下前同様、投稿全表示)
         return object_list
