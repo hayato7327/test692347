@@ -17,6 +17,7 @@
 <h5><p><a href="{% url 'blog:create' %}">👉投稿する👈</a></p></h5>
 
 <h2><p>⭐︎ ブログ一覧 ⭐︎</p></h2>
+<p>category_list: {{ category_list }}</p>
 
 <div style="display:inline-flex">
    <form class="form-inline my-2" method="GET" action="{% url 'blog:search' %}">
@@ -27,10 +28,9 @@
    <form class="form-inline my-2" method="GET" action="{% url 'blog:search_category' %}">
     <input type="context" class="form-control" name="category_list" value="{{request.GET.query_cate}}">
     <button type="submit" class="btn btn-primary">検索</button>
+    <select name="category_list">
     {% for item in category_list %}
-    <select name="cate_list">
-        <option name="category" value="{{ item.category }}">{{ item.category }}</option>
-    </select>
+        <option name="category" value="{{ item.id }}">{{ item.name }}</option>
     {% endfor %}
     </select>
 
@@ -40,7 +40,7 @@
 
 <ol>
     
-    {% for post in object_list %}
+    {% for post in post_list %}
     
     <li>
         <a href="{% url 'blog:detail' post.id %}">{{ post.title }}</a> 

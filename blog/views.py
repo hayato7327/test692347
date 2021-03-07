@@ -10,7 +10,7 @@ from django.db.models import Q
 
 
 class Index(ListView):
-    model = Post
+    template_name = 'post_list.html'
     context_object_name = 'post_list'
     queryset = Post.objects.order_by('category')
     model = Post
@@ -18,7 +18,7 @@ class Index(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['category_list'] = Category.objects.all
+        context['category_list'] = Category.objects.all()
         return context
 
 
