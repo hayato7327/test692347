@@ -7,10 +7,6 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Post, Category, Tag
 from django.db.models import Q
-import logging
-
-logger = logging.getLogger('development')
-logger.info('Hello World!')
 
 
 class Index(ListView):
