@@ -23,16 +23,16 @@
    <form class="form-inline my-2" method="GET" action="{% url 'blog:search' %}">
    <input type="text" class="form-control" name="query" value="{{request.GET.query}}"
           placeholder="タイトル、本文からワード検索" style="width:250px;">
-   <button type="submit" class="btn btn-primary">検索</button>
+   <button type="submit" class="btn btn-primary" style="margin-right:50px;">検索</button>
 
-   <form class="form-inline my-2" method="GET" action="{% url 'blog:search_category' %}">
-    <input type="context" class="form-control" name="category_list" value="{{request.GET.query_cate}}">
-    <button type="submit" class="btn btn-primary">検索</button>
-    <select name="category_list">
+   
+    <select name="category_list" style="height:39px;">
     {% for item in category_list %}
-        <option name="category" value="{{ item.id }}">{{ item.name }}</option>
+        <option name="query_cate" value="{{ item.id }}" method="GET" action="{% url 'blog:search_category' %}" 
+                value="{{request.GET.query}">{{ item.name }}</option>
     {% endfor %}
     </select>
+    <button type="submit" class="btn btn-primary">検索</button>
 
     {% csrf_token %}
 </form>

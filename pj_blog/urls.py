@@ -4,12 +4,13 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView
 from blog.models import Post
 from registration import views
+from blog.views import Index
 
 admin.site.site_title = 'ドラマブログ共有コミュニティ　内部管理サイト'
 admin.site.site_header = 'ドラマブログ共有コミュニティ 内部管理サイト'
 admin.site.index_title = 'メニュー'
 
-index_view = ListView.as_view(template_name="blog/post_list.html", model=Post)
+index_view = Index.as_view(template_name="blog/post_list.html", model=Post)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

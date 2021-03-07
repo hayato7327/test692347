@@ -10,7 +10,7 @@ from django.db.models import Q
 
 
 class Index(ListView):
-    template_name = 'post_list.html'
+    model = Post
     context_object_name = 'post_list'
     queryset = Post.objects.order_by('category')
     model = Post
@@ -44,8 +44,7 @@ class SearchCategory(ListView):
         q_word = self.request.GET.get("query_cate")
         if q_word:
             object_list = Category.objects.filter(
-                Q(title__icontains=q_word) |  #icontains = 部分一致
-                Q(body__icontains=q_word))
+                Q(category__icontains=q_word)#icontains = 部分一致
         else:
             object_list = Post.objects.all() #もしフォームに何も入力せずに検索ボタン押したら、何も起こらない(ボタン押下前同様、投稿全表示)
         return object_list
