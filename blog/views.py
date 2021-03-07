@@ -7,10 +7,14 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Post, Category, Tag
 from django.db.models import Q
+import logging
+
+logger = logging.getLogger('development')
+logger.info('Hello World!')
 
 
 class Index(ListView):
-    model = Post
+    template_name = 'post_list.html'
     context_object_name = 'post_list'
     queryset = Post.objects.order_by('category')
     model = Post
@@ -18,7 +22,7 @@ class Index(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['category_list'] = Category.objects.all
+        context['category_list'] = Category.objects.all()
         return context
 
 
