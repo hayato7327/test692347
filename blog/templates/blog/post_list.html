@@ -20,23 +20,23 @@
 <p>category_list: {{ category_list }}</p>
 
 <div style="display:inline-flex">
-   <form class="form-inline my-2" method="GET" action="{% url 'blog:search' %}">
-   <input type="text" class="form-control" name="query" value="{{request.GET.query}}"
+    <form class="form-inline my-2" method="GET" action="{% url 'blog:search' %}">
+        <input type="text" class="form-control" name="query" value="{{request.GET.query}}"
           placeholder="タイトル、本文からワード検索" style="width:250px;">
-   <button type="submit" class="btn btn-primary" style="margin-right:50px;">検索</button>
+        <button type="submit" class="btn btn-primary" style="margin-right:50px;">検索</button>
+    </form>
 
    
     <select name="category_list" style="height:39px; border-radius:5px;">
     {% for item in category_list %}
-    <form class="form-inline my-2" method="GET" action="{% url 'blog:search_category' %}">
-    <option name="query_cate" value="{{ item.id }}"
-            value="{{request.GET.query_cate}}">{{ item.name }}</option>
+       <form class="form-inline my-2" method="GET" action="{% url 'blog:search_category' %}">
+          <option name="query_cate" value="{{ request.GET.query_cate }}">{{ item.name }}</option>
     {% endfor %}
     </select>
-    <button type="submit" class="btn btn-primary">検索</button>
+       <button type="submit" class="btn btn-primary">検索</button>
 
     {% csrf_token %}
-</form>
+    </form>
 </div>
 
 <ol>
