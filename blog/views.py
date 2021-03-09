@@ -9,21 +9,26 @@ from .models import Post, Category, Tag
 from django.db.models import Q
 
 
+       #トップページ
 class Index(ListView):
     model = Post
-    context_object_name = 'post_list'
-    queryset = Post.objects.order_by('category')
+
+     #プルダウンに項目を渡す関数
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['category_list'] = Category.objects.all() #トップページIndexのプルダウンに、存在する全てのカテゴリーを渡す
+        context['tags_list'] = Tag.objects.all() #トップページIndexのプルダウンに、存在する全てのタグを渡す
+        return context
+
+       #一番左の検索ボタン押した先のページ
+class Search(ListView):
     model = Post
-    paginate_by = 7
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['category_list'] = Category.objects.all()
+        context['category_list'] = Category.objects.all() #ここでも記述しないと、一番左の検索ボタン押したら真ん中の検索フォームのプルダウンリストが消える(フォーム崩れみたいな現象)
+        context['tags_list'] = Tag.objects.all() #ここでも記述しないと、一番左の検索ボタン押したら一番左の検索フォームのプルダウンリストが消える(フォーム崩れみたいな現象)
         return context
-
-
-class Search(ListView):
-    model = Post
 
     def get_queryset(self): #検索関数  queryは設置html、post_list.htmlで定義
         q_word = self.request.GET.get("query")
@@ -35,20 +40,40 @@ class Search(ListView):
             object_list = Post.objects.all() #もしフォームに何も入力せずに検索ボタン押したら、何も起こらない(ボタン押下前同様、投稿全表示)
         return object_list
 
-
+       #真ん中の検索ボタン押した先のページ
 class SearchCategory(ListView):
     model = Post
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['category_list'] = Category.objects.all()
+        context['tags_list'] = Tag.objects.all()
+        return context
+    
+
+    def get_queryset(self): #検索関数  query_cateは設置html、post_list.htmlで定義
+        q_word = self.request.GET.get("query_cate")
+        object_list = Post.objects.filter(
+            Q(category__id=q_word))
+
+        return object_list
+
+       #一番右の検索ボタン押した先のページ
+class SearchTag(ListView):
+    model = Post
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['category_list'] = Category.objects.all()
+        context['tags_list'] = Tag.objects.all()
+        return context
     
 
     def get_queryset(self): #検索関数  queryは設置html、post_list.htmlで定義
-        q_word = self.request.GET.get("query_cate")
-        print("q_word")
-        print(q_word)
-        if q_word:
-            object_list = Post.objects.filter(
-                Q(category__icontains=q_word)) #icontains = 部分一致
-        else:
-            object_list = Post.objects.all() #もしフォームに何も入力せずに検索ボタン押したら、何も起こらない(ボタン押下前同様、投稿全表示)
+        q_word = self.request.GET.get("query_tag")
+        object_list = Post.objects.filter(
+            Q(tags__id=q_word))
+
         return object_list
 
 
@@ -68,9 +93,9 @@ class Create(CreateView):
     model = Post
     fields = ["title", "body", "category", "tags"]
                                                             
-    def form_valid(self, form): #form_validはフォームバリデーションに問題がなかった時に行う処理を記述する関数
+    def form_valid(self, form): #form_validはフォームバリデーションに問題がなかった時に行う処理を記述する関数。今回は投稿にユーザーIDを持たせる
         post = form.save(commit=False) #入力フォームを仮セーブし
-        post.accessuser = self.request.user #そのフォームをPOSTしてきたユーザをaccessuserに入れて、accessuserとログインユーザーが一緒だったら
+        post.accessuser = self.request.user #そのフォームをPOSTしてきたユーザをmodelsのaccessuserに入れて、accessuserとログインユーザーが一緒だったら
         post.save() # データベースに本セーブする
         return super().form_valid(form) #returnでform_validを親クラスのCreateに返す。親クラスに返すときはsuper()が必要
 
