@@ -7,7 +7,7 @@ SECRET_KEY = '&gu!13y)u^5buhjiw15602$g@ufj(eh6s6=b16td+5()gul!&7'
  #開発時は常時True 本番公開時は必ずFalse 
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'registration',
@@ -95,9 +95,9 @@ STATICFILES_DIRS = [
     
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-LOGIN_URL = "/login/"
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/login/"
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/login/'
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
@@ -110,9 +110,8 @@ AUTH_USER_MODEL = 'registration.User'
  #開発用のURLを記載(ターミナルに表示される)
 FRONTEND_URL = 'http://127.0.0.1:8000/'
 
- #会員登録メール送信サーバーはSendGridを使用
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'apikey'
-EMAIL_HOST_PASSWORD = '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'
+EMAIL_HOST = 'smtp.mailgun.org'
 EMAIL_PORT = 587
+EMAIL_HOST_USER = 'postmaster@sandboxe2d7e62ecea942f1a4123bb665ab6482.mailgun.org'
+EMAIL_HOST_PASSWORD = 'adgjm135'
 EMAIL_USE_TLS = True

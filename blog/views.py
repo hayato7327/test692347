@@ -27,7 +27,7 @@ class Search(ListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['category_list'] = Category.objects.all() #ここでも記述しないと、一番左の検索ボタン押したら真ん中の検索フォームのプルダウンリストが消える(フォーム崩れみたいな現象)
-        context['tags_list'] = Tag.objects.all() #ここでも記述しないと、一番左の検索ボタン押したら一番左の検索フォームのプルダウンリストが消える(フォーム崩れみたいな現象)
+        context['tags_list'] = Tag.objects.all() #ここでも記述しないと、一番左の検索ボタン押したら一番右のタグ検索フォームのプルダウンリストが消える(フォーム崩れみたいな現象)
         return context
 
     def get_queryset(self): #検索関数  queryは設置html、post_list.htmlで定義
@@ -46,8 +46,9 @@ class SearchCategory(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['category_list'] = Category.objects.all()
-        context['tags_list'] = Tag.objects.all()
+        context["category_list"] = Category.objects.all()
+        context["tags_list"] = Tag.objects.all()
+        context["selected_category"] = self.request.GET.get("query_cate") #カテゴリー検索したら、その選択したカテゴリーがなんだったのかselected_categoryに入れる
         return context
     
 
