@@ -48,8 +48,8 @@ class SearchCategory(ListView):
         context = super().get_context_data(*args, **kwargs)
         context["category_list"] = Category.objects.all()
         context["tags_list"] = Tag.objects.all()
-        context["selected_category"] = self.request.GET.get("query_cate") #カテゴリー検索したら、その選択したカテゴリーがなんだったのかselected_categoryに入れる
-        return context
+        context["selected_category"] = int(self.request.GET.get("query_cate")) #カテゴリー検索したら、その選択したカテゴリーがなんだったのかselected_categoryに入れる
+        return context                                                         #GETで取得した値は文字列なので、intで数値に変換する
     
 
     def get_queryset(self): #検索関数  query_cateは設置html、post_list.htmlで定義
@@ -67,6 +67,7 @@ class SearchTag(ListView):
         context = super().get_context_data(*args, **kwargs)
         context['category_list'] = Category.objects.all()
         context['tags_list'] = Tag.objects.all()
+        context["selected_tags"] = int(self.request.GET.get("query_tag"))
         return context
     
 
