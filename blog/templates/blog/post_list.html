@@ -19,7 +19,7 @@
 <h2><p>⭐︎ ブログ一覧 ⭐︎</p></h2>
 
 <!--formを横並びにする-->
-<div style="display:inline-flex; margin-bottom:30px;">
+{% comment %} <div style="display:inline-flex; margin-bottom:30px;">
     <form class="form-inline my-2" method="GET" action="{% url 'blog:search' %}">
         <input type="text" class="form-control" name="query" value="{{request.GET.query}}"
           placeholder="タイトル、本文からワード検索" style="width:250px;">
@@ -54,18 +54,13 @@
         </select>
         <button type="submit" class="btn btn-primary">タグ検索</button>
     </form>
-    
-
+</div> {% endcomment %}
 <!--form外に記述-->
-{% csrf_token %}
+{% comment %} {% csrf_token %} {% endcomment %}
 
-</div>
-
-<ol>
-    
-    {% for post in post_list %}
-    
-    <li>
+<div class="infinite-container">
+    {% for post in object_list %}
+    <div class="infinite-item">
         <a href="{% url 'blog:detail' post.id %}">{{ post.title }}</a> 
         <p>投稿者：{{ post.accessuser }}</p>
 
@@ -77,16 +72,17 @@
           <span class="liked-cnt" id="like{{post.pk}}">{{ post.like.count }}</span>
           <i class="fas fa-thumbs-up"></i>
         </button>
-        
-   </li>
-
+   </div>
    {% endfor %}
-
-</ol>
+</div>
 
 <div class="loading" style="display: none;">
     読み込み中...
 </div>
+
+{% if page_obj.has_next %}
+<a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}">さらに読み込む</a>
+{% endif %}
 
 <link rel="stylesheet" type="text/css" href="{% static 'like.css' %}" />
 <link href="{% static 'fontawesome_free/css/all.min.css' %}" rel="stylesheet" type="text/css">
@@ -96,19 +92,15 @@
 
 
 {% block extrajs %}
-
 <script>
-window.alert("101行目")
 var infinite = new Waypoint.Infinite({
     element: $('.infinite-container')[0],
     onBeforePageLoad: function () {
     $('.loading').show();
     },
-    onAfterPageLoad: function ($items) {
+    onAfterPageLoad: function () {
     $('.loading').hide();
     }
 });
-window.alert("111行目")
 </script>
-
 {% endblock %}
