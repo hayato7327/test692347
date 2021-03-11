@@ -84,8 +84,31 @@
 
 </ol>
 
+<div class="loading" style="display: none;">
+    読み込み中...
+</div>
+
 <link rel="stylesheet" type="text/css" href="{% static 'like.css' %}" />
 <link href="{% static 'fontawesome_free/css/all.min.css' %}" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="{% static 'like.js' %}"></script> <!--js読み込み時は、scriptタグを使用。srcで読み込みファイル名を指定-->
+
+{% endblock %}
+
+
+{% block extrajs %}
+
+<script>
+window.alert("101行目")
+var infinite = new Waypoint.Infinite({
+    element: $('.infinite-container')[0],
+    onBeforePageLoad: function () {
+    $('.loading').show();
+    },
+    onAfterPageLoad: function ($items) {
+    $('.loading').hide();
+    }
+});
+window.alert("111行目")
+</script>
 
 {% endblock %}

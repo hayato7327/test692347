@@ -12,6 +12,10 @@ from django.db.models import Q
        #トップページ
 class Index(ListView):
     model = Post
+    paginate_by = 3
+
+    def get_queryset(self):
+        return self.model.objects.all().order_by('created')
 
      #プルダウンに項目を渡す関数
     def get_context_data(self, *args, **kwargs):
