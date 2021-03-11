@@ -19,7 +19,7 @@
 <h2><p>⭐︎ ブログ一覧 ⭐︎</p></h2>
 
 <!--formを横並びにする-->
-{% comment %} <div style="display:inline-flex; margin-bottom:30px;">
+<div style="display:inline-flex; margin-bottom:30px;">
     <form class="form-inline my-2" method="GET" action="{% url 'blog:search' %}">
         <input type="text" class="form-control" name="query" value="{{request.GET.query}}"
           placeholder="タイトル、本文からワード検索" style="width:250px;">
@@ -54,7 +54,7 @@
         </select>
         <button type="submit" class="btn btn-primary">タグ検索</button>
     </form>
-</div> {% endcomment %}
+</div>
 <!--form外に記述-->
 {% comment %} {% csrf_token %} {% endcomment %}
 
