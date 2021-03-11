@@ -12,7 +12,7 @@ from django.db.models import Q
        #トップページ
 class Index(ListView):
     model = Post
-    paginate_by = 3
+    paginate_by = 5
 
     def get_queryset(self):
         return self.model.objects.all().order_by('created')
