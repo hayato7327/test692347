@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
 from django.contrib.auth.models import User
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Post, Category, Tag
 from django.db.models import Q
@@ -12,7 +12,7 @@ from django.db.models import Q
        #トップページ
 class Index(ListView):
     model = Post
-    paginate_by = 5
+    paginate_by = 3
 
     def get_queryset(self):
         return self.model.objects.all().order_by('created')
@@ -23,6 +23,11 @@ class Index(ListView):
         context['category_list'] = Category.objects.all() #トップページIndexのプルダウンに、存在する全てのカテゴリーを渡す
         context['tags_list'] = Tag.objects.all() #トップページIndexのプルダウンに、存在する全てのタグを渡す
         return context
+
+
+class Mypage(ListView):
+    model = Post
+    template_name = "blog/mypage.html"
 
        #一番左の検索ボタン押した先のページ
 class Search(ListView):
