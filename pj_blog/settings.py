@@ -110,8 +110,8 @@ AUTH_USER_MODEL = 'registration.User'
  #開発用のURLを記載(ターミナルに表示される)
 FRONTEND_URL = 'http://127.0.0.1:8000/'
 
-EMAIL_HOST = 'smtp.mailgun.org'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'apikey'
-EMAIL_HOST_PASSWORD = '41c36b56042c699b56146b8600e1346a-e438c741-65a4c681'
-EMAIL_USE_TLS = True
+#EMAIL_HOST = ''
+#EMAIL_PORT = 
+#EMAIL_HOST_USER = 'apikey'
+#EMAIL_HOST_PASSWORD = ''
+#EMAIL_USE_TLS = True
