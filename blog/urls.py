@@ -9,6 +9,7 @@ app_name = "blog" #アプリが複数ある時は、どのアプリのurlを指�
 urlpatterns = [
     path("", views.Index.as_view(), name="index"),
     path("mypage", views.Mypage.as_view(), name="mypage"),
+    path("change_data", views.change_data, name="change_data"),
     path("search/", views.Search.as_view(), name="search"),
     path("search_category/", views.SearchCategory.as_view(), name="search_category"),
     path("search_tag/", views.SearchTag.as_view(), name="search_tag"),

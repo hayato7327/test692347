@@ -1,0 +1,27 @@
+{% extends "blog/base.html" %}
+{% block main %}
+ 
+<form class="my-form" action="" method="POST">
+  <div class="form-group">
+    <label for="id_username">ユーザネーム</label>
+    {{ form.username }}
+    {{ form.username.errors }}
+    <p class="help-block">{{ form.username.help_text }}</p>
+  </div>
+ 
+  <div class="form-group">
+    <label for="id_email">Email</label>
+    {{ form.email }}
+    {{ form.email.errors }}
+    <p class="help-block">{{ form.email.help_text }}</p>
+  </div>
+ 
+ 
+  <div class="form-group">
+    <div>
+      <input type="submit" class="btn btn-default" value="登録">
+    </div>
+  </div>
+  {% csrf_token %}
+</form>
+{% endblock %}

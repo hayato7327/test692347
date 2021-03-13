@@ -7,6 +7,24 @@ from django.views.generic import ListView, DetailView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Post, Category, Tag
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
+from blog.forms import UserChangeForm
+
+
+@login_required
+def change_data(request):
+ 
+    form = UserChangeForm(request.POST or None, instance=request.user)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        return redirect("app1:index")
+ 
+    context = {
+        "form": form,
+    }
+    return render(request, 'blog/change_data.html', context)
+
 
 
        #トップページ
