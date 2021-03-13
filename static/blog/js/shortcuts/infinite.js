@@ -63,7 +63,7 @@ https://github.com/imakewebthings/waypoints/blob/master/licenses.txt
   }
 
   /* Public */
-  Infinite.prototype.destroy = function() {
+Infinite.prototype.destroy = function() {
     if (this.waypoint) {
       this.waypoint.destroy()
     }

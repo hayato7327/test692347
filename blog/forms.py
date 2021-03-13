@@ -1,31 +1,29 @@
 from django import forms
-from django.contrib.auth.forms import User
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.contrib.auth.forms import AuthenticationForm
+
 
 
 class UserChangeForm(forms.ModelForm):
  
     # 入力を必須にするために、required=Trueで上書き
     email = forms.EmailField(required=True)
-    first_name = forms.CharField(max_length=30, required=True)
-    last_name = forms.CharField(max_length=30, required=True)
+    username = forms.CharField(max_length=20, help_text="20文字以下で入力してください。")
  
  
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.user = kwargs.get('instance', None)
-        self.fields['username'].widget.attrs['class'] = 'form-control'
-        self.fields['email'].widget.attrs['class'] = 'form-control'
-        self.fields['first_name'].widget.attrs['class'] = 'form-control'
-        self.fields['last_name'].widget.attrs['class'] = 'form-control'
- 
+        self.user = kwargs.get("instance", None)
+        self.fields["username"].widget.attrs["class"] = "form-control"
+        self.fields["email"].widget.attrs["class"] = "form-control"
+        
+
     class Meta:
-        model = User
-        fields = (
-            "username", "email", "first_name", "last_name",
-        )
+        model = get_user_model()
+        fields = ("username", "email")
+        
  
     def clean_email(self):
         email = self.cleaned_data["email"]
@@ -36,8 +34,8 @@ class UserChangeForm(forms.ModelForm):
             raise ValidationError("正しいメールアドレスを指定してください。")
  
         try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
+            user = get_user_model().objects.get(email=email)
+        except get_user_model().DoesNotExist:
             return email
         else:
             if self.user.email == email:

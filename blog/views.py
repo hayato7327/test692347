@@ -10,6 +10,7 @@ from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from blog.forms import UserChangeForm
+import time
 
 
 @login_required
@@ -18,28 +19,30 @@ def change_data(request):
     form = UserChangeForm(request.POST or None, instance=request.user)
     if request.method == "POST" and form.is_valid():
         form.save()
-        return redirect("app1:index")
+        return redirect("blog:index")
  
     context = {
         "form": form,
     }
-    return render(request, 'blog/change_data.html', context)
+    return render(request, "blog/change_data.html", context)
 
 
 
        #トップページ
 class Index(ListView):
     model = Post
-    paginate_by = 3
+    paginate_by = 5
+    
 
     def get_queryset(self):
-        return self.model.objects.all().order_by('created')
+        return self.model.objects.all().order_by("created")
 
      #プルダウンに項目を渡す関数
     def get_context_data(self, *args, **kwargs):
+        time.sleep(1)
         context = super().get_context_data(*args, **kwargs)
-        context['category_list'] = Category.objects.all() #トップページIndexのプルダウンに、存在する全てのカテゴリーを渡す
-        context['tags_list'] = Tag.objects.all() #トップページIndexのプルダウンに、存在する全てのタグを渡す
+        context["category_list"] = Category.objects.all() #トップページIndexのプルダウンに、存在する全てのカテゴリーを渡す
+        context["tags_list"] = Tag.objects.all() #トップページIndexのプルダウンに、存在する全てのタグを渡す
         return context
 
 
@@ -53,8 +56,8 @@ class Search(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['category_list'] = Category.objects.all() #ここでも記述しないと、一番左の検索ボタン押したら真ん中の検索フォームのプルダウンリストが消える(フォーム崩れみたいな現象)
-        context['tags_list'] = Tag.objects.all() #ここでも記述しないと、一番左の検索ボタン押したら一番右のタグ検索フォームのプルダウンリストが消える(フォーム崩れみたいな現象)
+        context["category_list"] = Category.objects.all() #ここでも記述しないと、一番左の検索ボタン押したら真ん中の検索フォームのプルダウンリストが消える(フォーム崩れみたいな現象)
+        context["tags_list"] = Tag.objects.all() #ここでも記述しないと、一番左の検索ボタン押したら一番右のタグ検索フォームのプルダウンリストが消える(フォーム崩れみたいな現象)
         return context
 
     def get_queryset(self): #検索関数  queryは設置html、post_list.htmlで定義
@@ -92,8 +95,8 @@ class SearchTag(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['category_list'] = Category.objects.all()
-        context['tags_list'] = Tag.objects.all()
+        context["category_list"] = Category.objects.all()
+        context["tags_list"] = Tag.objects.all()
         context["selected_tags"] = int(self.request.GET.get("query_tag"))
         return context
     

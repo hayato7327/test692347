@@ -11,8 +11,8 @@
 <h2><p>⭐︎ {{user}}さんのブログ一覧 ⭐︎</p></h2>
 
 <div class="infinite-container">
-    {% for post in object_list %}
-    {% if request.user == post.accessuser %}
+  {% for post in object_list %}
+  {% if request.user == post.accessuser %}
     
     <div class="infinite-item">
         <a href="{% url 'blog:detail' post.id %}">{{ post.title }}</a> 
@@ -27,10 +27,32 @@
           <i class="fas fa-thumbs-up"></i>
         </button>
    </div>
-   {% endif %}
-   {% endfor %}
-   
+  {% endif %}
+  {% endfor %}
 </div>
+
+<h2><p>⭐︎ 過去にいいねした投稿 ⭐︎</p></h2>
+
+<div class="infinite-container">
+  {% for post in object_list %}
+  {% if object_list == request.user.post.like %}
+  
+    <div class="infinite-item">
+          <a href="{% url 'blog:detail' post.id %}">{{ post.title }}</a> 
+          <p>投稿者：{{ post.accessuser }}</p>
+
+          <!--もしいいねしていたユーザーがログインユーザーだったら、いいねボタンを光らせる。これにより、リロードしたり再度ログイン時、いいねしたボタンは常に光る-->
+          <!--like-btnと{の間にスペース無いと、like-btnonになってしまう-->
+          <!--request.userでログインユーザーを取得可能、post.like.allでいいねしてる全ユーザー取得可能-->
+          <button class="like-btn {% if request.user in post.like.all %}on{% endif %}"
+                     data-href="{{ post.get_api_like_url }}" data-id="{{post.pk}}">
+           <span class="liked-cnt" id="like{{post.pk}}">{{ post.like.count }}</span>
+           <i class="fas fa-thumbs-up"></i>
+          </button>
+    </div>
+  {% endif %}
+  {% endfor %}
+</div>}
 
 <link rel="stylesheet" type="text/css" href="{% static 'like.css' %}" />
 <link href="{% static 'fontawesome_free/css/all.min.css' %}" rel="stylesheet" type="text/css">
