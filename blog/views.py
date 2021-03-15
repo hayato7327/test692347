@@ -5,11 +5,11 @@ from rest_framework import authentication, permissions
 from django.contrib.auth.models import User
 from django.views.generic import ListView, DetailView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import Post, Category, Tag
+from .models import Post, Category, Tag, Comment
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
-from blog.forms import UserChangeForm
+from blog.forms import UserChangeForm, CommentCreateForm
 import time
 
 
@@ -49,6 +49,15 @@ class Index(ListView):
 class Mypage(ListView):
     model = Post
     template_name = "blog/mypage.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        # 自分の記事をmy_postsに入れてhtmlで使えるようにする
+        context["my_posts"] = Post.objects.filter(accessuser_id=self.request.user)
+        # いいねした記事をlike_postsに入れてhtmlで使えるようにする
+        context["like_posts"] = Post.objects.filter(like=self.request.user)
+        return context
+
 
        #一番左の検索ボタン押した先のページ
 class Search(ListView):
@@ -119,7 +128,27 @@ class Detail(DetailView):
         else:
             template_name = "blog/other_user_detail.html" #違ったら、編集削除ができないhtml(other_user_detail.html)を表示
         return template_name
-    
+
+
+class CommentCreate(CreateView):
+
+     #記事へのコメント作成ビュー
+    model = Comment
+    form_class = CommentCreateForm
+
+    def form_valid(self, form):
+        post_pk = self.kwargs["pk"]
+        post = get_object_or_404(Post, pk=post_pk)
+        comment = form.save(commit=False)
+        comment.target = post
+        comment.save()
+        return redirect("blog:detail", pk=post_pk)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["post"] = get_object_or_404(Post, pk=self.kwargs["pk"])
+        return context
+
 
 class Create(CreateView):
     model = Post

@@ -3,9 +3,10 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.contrib.auth.forms import AuthenticationForm
+from.models import Comment
 
 
-
+       #ユーザー情報変更ページ
 class UserChangeForm(forms.ModelForm):
  
     # 入力を必須にするために、required=Trueで上書き
@@ -42,3 +43,12 @@ class UserChangeForm(forms.ModelForm):
                 return email
  
             raise ValidationError("このメールアドレスは既に使用されています。別のメールアドレスを指定してください")
+
+
+       #コメント投稿フォーム
+class CommentCreateForm(forms.ModelForm):
+
+
+    class Meta:
+        model = Comment
+        exclude = ('target', 'created_at')

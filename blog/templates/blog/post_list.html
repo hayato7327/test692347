@@ -7,24 +7,25 @@
 <div style="display:inline-flex;"><h2><p>⭐︎ 会員ページ ⭐︎</p></h2>
     <h3 style="margin-left: 550px;"> <a href="{% url 'blog:mypage' %}">🔑 マイページ 🔑</a> </h3>
 </div>
-<p>{{ user }}さん、こんにちは😊</p>
+<p>ぼっちの{{ user }}さん、おかえりなさい🤗</p>
 <p>8000/adminで管理者用画面へ</p>
 <p><a href="{% url 'logout' %}">ログアウト</a></p>
 
 <h2><p>⭐︎ 新規投稿 ⭐︎</p></h2>
-<p>{{ user }}さんが今観ているドラマはなんですか？</p>
+<p>{{ user }}さんが現在、過去に経験したぼっち経験はなんですか？</p>
 
 <div style="display:inline-flex;">
-    <p>感想などを投稿して会員同士で共有してみませんか？</p>
+    <p>エピソードなどを投稿して会員同士で傷を舐め合いませんか？</p>
     <h5 style="margin-left: 30px;"><p><a href="{% url 'blog:create' %}"> 👉投稿する👈 </a></p></h5>
 </div>
 
 
 
-<h2><p>⭐︎ ブログ一覧 ⭐︎</p></h2>
+<h2><p>⭐︎ ぼっちブログ一覧 ⭐︎</p></h2>
 
 <!--formを横並びにする-->
 <div style="display:inline-flex; margin-bottom:30px;">
+    
     <form class="form-inline my-2" method="GET" action="{% url 'blog:search' %}">
         <input type="text" class="form-control" name="query" value="{{request.GET.query}}"
           placeholder="タイトル、本文からワード検索" style="width:250px;">

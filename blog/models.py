@@ -26,6 +26,7 @@ class Tag(models.Model):
         return self.name
 
 
+
 class Post(models.Model):
     created = models.DateTimeField(
         auto_now_add=True,
@@ -96,3 +97,28 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Comment(models.Model):
+
+     #記事に紐づくコメント
+    name = models.CharField(
+        max_length=20
+        blank=False,
+        null=False,
+    )
+
+    text = models.TextField(
+        max_length=255
+        blank=False,
+        null=False,
+    )
+
+    target = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        verbose_name="対象記事"
+    )
+
+    def __str__(self):
+        return self.text[:20]
