@@ -103,15 +103,17 @@ class Comment(models.Model):
 
      #記事に紐づくコメント
     name = models.CharField(
-        max_length=20
+        max_length=20,
         blank=False,
         null=False,
+        default="名無し"
     )
 
     text = models.TextField(
-        max_length=255
+        max_length=255,
         blank=False,
         null=False,
+        default="本文"
     )
 
     target = models.ForeignKey(

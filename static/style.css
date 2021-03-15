@@ -1,0 +1,12 @@
+.helptext {
+    font-size: 14px;
+}
+
+.field {
+    margin-bottom: 24px;
+}
+
+.field > * {
+    display: block;
+    width: 100%;
+}
