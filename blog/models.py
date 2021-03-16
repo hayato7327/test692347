@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.conf import settings
-from registration.models import User
+from django.contrib.auth import get_user_model
 
 
 class Category(models.Model):
@@ -75,14 +75,14 @@ class Post(models.Model):
     )
      #ForeignKeyの引数は紐付けたいモデル項目(今回はユーザーIDを持たせたいからregistration/models/User)
     accessuser = models.ForeignKey(
-        User,
+        get_user_model(),
         blank=True,
         null=True,
         on_delete=models.CASCADE,
     )
      # いいねボタン  #ひとつの投稿のいいねに複数のユーザーのいいね付けれるようManyToManyField
     like = models.ManyToManyField(
-        settings.AUTH_USER_MODEL,
+        get_user_model(),
         blank=True,
         related_name="post_like"
     )
@@ -114,6 +114,14 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
         verbose_name="対象記事"
     )
+
+    accessuser = models.ForeignKey(
+	    get_user_model(),
+        blank=False,
+        null=False,
+        on_delete=models.CASCADE,
+		verbose_name="コメントユーザー"
+	)
 
     def __str__(self):
         return self.text[:20]
