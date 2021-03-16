@@ -54,15 +54,15 @@ class Post(models.Model):
     body = models.TextField(
         blank=True,
         null=False,
-        verbose_name="本文",
+        verbose_name="本文"
     )
-
+     #ひとつの投稿にひとつしか付けれないからForeignKey
     category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE,
         verbose_name="カテゴリー"
     )
-        
+     #ひとつの投稿に複数付けれるからManyToManyField
     tags = models.ManyToManyField(
         Tag,
         blank=True,
@@ -73,14 +73,14 @@ class Post(models.Model):
         default=True,
         verbose_name="公開する"
     )
-     #ForeignKeyの引数は紐付けたい項目(今回はユーザーIDを持たせたいからregistration/models/User)
+     #ForeignKeyの引数は紐付けたいモデル項目(今回はユーザーIDを持たせたいからregistration/models/User)
     accessuser = models.ForeignKey(
         User,
         blank=True,
         null=True,
         on_delete=models.CASCADE,
     )
-     # いいね情報
+     # いいねボタン  #ひとつの投稿のいいねに複数のユーザーのいいね付けれるようManyToManyField
     like = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         blank=True,
@@ -102,18 +102,11 @@ class Post(models.Model):
 class Comment(models.Model):
 
      #記事に紐づくコメント
-    name = models.CharField(
-        max_length=20,
-        blank=False,
-        null=False,
-        default="名無し"
-    )
-
     text = models.TextField(
         max_length=255,
         blank=False,
         null=False,
-        default="本文"
+        verbose_name="コメント内容"
     )
 
     target = models.ForeignKey(

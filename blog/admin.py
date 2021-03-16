@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django import forms
-
 from . import models
 
 
@@ -55,11 +54,11 @@ class PostAdmin(admin.ModelAdmin):
      #fieldsetsに指定すれば管理画面の項目に追加できる
     fieldsets = [
         (None, {"fields": ("title", )}),
-        ("コンテンツ", {"fields": ("body", )}),
-        ("分類", {"fields": ("category", "tags")}),
-        ("メタ", {"fields": ("created", "updated")}),
+        ("本文", {"fields": ("body", )}),
+        ("カテゴリー タグ", {"fields": ("category", "tags")}),
+        ("日付", {"fields": ("created", "updated")}),
         ("いいね", {"fields": ("like",)}),
-        ("投稿者", {"fields": ("accessuser",)})
+        ("投稿者", {"fields": ("accessuser",)}),
     ]
 
     form = PostAdminForm

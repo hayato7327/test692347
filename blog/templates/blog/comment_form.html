@@ -17,8 +17,8 @@
         {% endfor %}
         {% csrf_token %}
 
-        <button type="submit" class="btn-link">送信</button>
-        <a class="button btn-link" href="{% url 'blog:detail' post.pk %}">送信せずに戻る</a>
+        <button type="submit" class="btn btn-primary" style="margin-right:50px;">コメントする</button>
+        <a class="button btn-link" href="{% url 'blog:detail' post.pk %}">コメントせずに戻る</a>
     </form>
 
 <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />

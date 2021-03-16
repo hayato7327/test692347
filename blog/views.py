@@ -141,8 +141,11 @@ class CommentCreate(CreateView):
         post = get_object_or_404(Post, pk=post_pk)
         comment = form.save(commit=False)
         comment.target = post
+        comment.accessuser = self.request.user
         comment.save()
         return redirect("blog:detail", pk=post_pk)
+        return super().form_valid(form)
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
