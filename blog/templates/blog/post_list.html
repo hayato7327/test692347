@@ -21,7 +21,7 @@
 
 
 
-<h2><p>⭐︎ ぼっちブログ一覧 ⭐︎</p></h2>
+<h2><p>⭐︎ ブログ一覧 ⭐︎</p></h2>
 
 <!--formを横並びにする-->
 <div style="display:inline-flex; margin-bottom:30px;">
@@ -38,9 +38,11 @@
             {% for item in category_list %}
                 {% if item.id == selected_category %}
                     <option selected value="{{ item.id }}">{{ item.name }}</option>
+
                 <!--わかりにくいが、トップページ時のカテゴリー状態の処理-->
                 {% else %}
                     <option value="{{ item.id }}">{{ item.name }}</option>
+
                 {% endif %} 
             {% endfor %}
         </select>
@@ -60,6 +62,18 @@
         </select>
         <button type="submit" class="btn btn-primary">タグ検索</button>
     </form>
+
+    <form class="form-inline my-2" method="GET" action="{% url 'blog:like_sort' %}">
+        <select name="query_like" style="height:39px; border-radius:5px;">
+            {% for item_like in like_list %}
+               
+                    <option value="{{ item_like }}">{{ item_like.name }}</option>
+                
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-primary">並び替え</button>
+    </form>
+
 </div>
 <!--form外に記述-->
 {% comment %} {% csrf_token %} {% endcomment %}

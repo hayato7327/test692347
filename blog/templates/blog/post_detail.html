@@ -6,11 +6,12 @@
 
 {% load static %}
 
-<h2>{{ object.title }}</h2>
+<h2 style="margin-bottom: 50px;">{{ object.title }}</h2>
 
-<h4><p>{{ object.body }}</h4></p>
+<!--| linebreaksbrは、フォームで改行したら投稿ページに反映させるもの-->
+<h4 style="margin-bottom: 50px;"><p>{{ object.body | linebreaksbr }}</h4></p>
 
-<p>投稿者：{{ post.accessuser }}</p>
+<p>投稿者 :【{{ post.accessuser }}】</p>
 
 <p>選択されたカテゴリー:【{{ object.category }}】</p>
 
@@ -20,19 +21,22 @@
 <p>更新日時：<time>{{ object.updated|localtime|localize }}</time></p>
 
 <button class="like-btn {%if request.user in post.like.all %}on{%endif%}"
-                       data-href="{{ post.get_api_like_url }}" data-id="{{post.pk}}">
-          <span class="liked-cnt" id="like{{post.pk}}">{{ post.like.count }}</span>
-          <i class="fas fa-thumbs-up"></i>
+        data-href="{{ post.get_api_like_url }}" data-id="{{post.pk}}" style="margin-bottom: 50px;">
+    <span class="liked-cnt" id="like{{post.pk}}">{{ post.like.count }}</span>
+    <i class="fas fa-thumbs-up"></i>
 </button>
 
 <p><a href="{% url 'blog:update' object.pk %}">編集</a></p>
-<p><a href="{% url 'blog:delete' object.pk %}">削除</a></p>
+<p style="margin-bottom: 50px;"><a href="{% url 'blog:delete' object.pk %}">削除</a></p>
 
-<p><a href="{% url 'blog:comment_create' post.pk %}" target="_blank" rel="nofollow">記事にコメントする</a></p>
+<p><a href="{% url 'blog:comment_create' post.pk %}" target="_blank" rel="nofollow">ブログにコメントする</a></p>
 
 
 {% for comment in object.comment_set.all %}
-<p>{{ comment.accessuser }} {{ comment }}</p>
+
+<p>🔔 コメント投稿者 :【{{ comment.accessuser }}】</p>
+<p>{{ comment | linebreaksbr }}</p>
+
 {% endfor %}
 
 

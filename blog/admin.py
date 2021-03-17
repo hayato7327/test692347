@@ -94,3 +94,8 @@ class PostAdmin(admin.ModelAdmin):
         queryset.update(published=False)
         
     unpublish.short_description = "下書きに戻す"
+
+
+@admin.register(models.Comment)
+class Admin(admin.ModelAdmin):
+    pass

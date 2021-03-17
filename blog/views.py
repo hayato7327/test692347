@@ -35,7 +35,7 @@ class Index(ListView):
     
 
     def get_queryset(self):
-        return self.model.objects.all().order_by("created")
+        return self.model.objects.all().order_by("-created") #投稿記事の並び順 新しい投稿を上へ
 
      #プルダウンに項目を渡す関数
     def get_context_data(self, *args, **kwargs):
@@ -110,10 +110,31 @@ class SearchTag(ListView):
         return context
     
 
-    def get_queryset(self): #検索関数  queryは設置html、post_list.htmlで定義
+    def get_queryset(self):
         q_word = self.request.GET.get("query_tag")
         object_list = Post.objects.filter(
             Q(tags__id=q_word))
+
+        return object_list
+
+
+class LikeSort(ListView):
+    model = Post
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["category_list"] = Category.objects.all()
+        context["tags_list"] = Tag.objects.all()
+        context["like_list"] = Post.object.like.all()
+        like_list = sorted(like_list)
+        context["selected_like_list"] = int(self.request.GET.get("query_like")) #カテゴリー検索したら、その選択したカテゴリーがなんだったのかselected_categoryに入れる
+        return context                                                         #GETで取得した値は文字列なので、intで数値に変換する
+    
+
+    def get_queryset(self): #検索関数  query_cateは設置html、post_list.htmlで定義
+        q_word = self.request.GET.get("query_like")
+        object_list = Post.objects.filter(
+            Q(like__id=q_word))
 
         return object_list
 

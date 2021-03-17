@@ -52,7 +52,7 @@ class Post(models.Model):
     )
         
     body = models.TextField(
-        blank=True,
+        blank=False,
         null=False,
         verbose_name="本文"
     )
@@ -124,4 +124,4 @@ class Comment(models.Model):
 	)
 
     def __str__(self):
-        return self.text[:20]
+        return self.text

@@ -51,4 +51,6 @@ class CommentCreateForm(forms.ModelForm):
 
     class Meta:
         model = Comment
-        exclude = ('target', 'created_at')
+        
+         #excludeに指定するとcomment_form.htmlに項目を非表示にできる
+        exclude = ("target", "accessuser")
