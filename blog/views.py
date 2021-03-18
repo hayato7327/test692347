@@ -33,16 +33,45 @@ class Index(ListView):
     model = Post
     paginate_by = 5
     
-
+         #検索関数
     def get_queryset(self):
-        return self.model.objects.all().order_by("-created") #投稿記事の並び順 新しい投稿を上へ
+        posts = Post.objects.all() # ここで１度全てのPOSTオブジェクトを取得します。
+
+        q_word = self.request.GET.get("query")
+        if q_word:
+            object_list = Post.objects.filter(
+                Q(title__icontains=q_word) |  # Q = titleもしくはbodyで検索という意味 title単体検索の場合いらない
+                Q(body__icontains=q_word)     #icontains = フォームに入力した検索ワードにbodyに書かれてる文字列が部分一致したら
+                )
+
+            return object_list
+
+        if "query_cate" in self.request.GET:
+            return posts.filter(category__id=self.request.GET.get("query_cate"))
+
+        if "query_tag" in self.request.GET:
+            return posts.filter(tags__id=self.request.GET.get("query_tag"))
+
+        else:
+            return posts.order_by("-created") #URLが上記以外(8000/)の時は投稿を全て表示
+
+
+        
+
+       
+            
 
      #プルダウンに項目を渡す関数
     def get_context_data(self, *args, **kwargs):
         time.sleep(1)
         context = super().get_context_data(*args, **kwargs)
         context["category_list"] = Category.objects.all() #トップページIndexのプルダウンに、存在する全てのカテゴリーを渡す
-        context["tags_list"] = Tag.objects.all() #トップページIndexのプルダウンに、存在する全てのタグを渡す
+        context["selected_category"] = int(self.request.GET.get("query_cate")) #カテゴリー検索したら、その選択したカテゴリーがなんだったのかselected_categoryに入れる
+                                                                               #GETで取得した値は文字列なので、intで数値に変換する
+        context["tags_list"] = Tag.objects.all()
+        context["selected_tag"] = int(self.request.GET.get("query_tag"))
+        context["like_list"] = ["いいね多い順", "いいね少ない順"]
+        context["selected_like"] = int(self.request.GET.get("query_like"))
         return context
 
 
@@ -57,86 +86,6 @@ class Mypage(ListView):
         # いいねした記事をlike_postsに入れてhtmlで使えるようにする
         context["like_posts"] = Post.objects.filter(like=self.request.user)
         return context
-
-
-       #一番左の検索ボタン押した先のページ
-class Search(ListView):
-    model = Post
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        context["category_list"] = Category.objects.all() #ここでも記述しないと、一番左の検索ボタン押したら真ん中の検索フォームのプルダウンリストが消える(フォーム崩れみたいな現象)
-        context["tags_list"] = Tag.objects.all() #ここでも記述しないと、一番左の検索ボタン押したら一番右のタグ検索フォームのプルダウンリストが消える(フォーム崩れみたいな現象)
-        return context
-
-    def get_queryset(self): #検索関数  queryは設置html、post_list.htmlで定義
-        q_word = self.request.GET.get("query")
-        if q_word:
-            object_list = Post.objects.filter(
-                Q(title__icontains=q_word) |  #icontains = 部分一致
-                Q(body__icontains=q_word))
-        else:
-            object_list = Post.objects.all() #もしフォームに何も入力せずに検索ボタン押したら、何も起こらない(ボタン押下前同様、投稿全表示)
-        return object_list
-
-       #真ん中の検索ボタン押した先のページ
-class SearchCategory(ListView):
-    model = Post
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        context["category_list"] = Category.objects.all()
-        context["tags_list"] = Tag.objects.all()
-        context["selected_category"] = int(self.request.GET.get("query_cate")) #カテゴリー検索したら、その選択したカテゴリーがなんだったのかselected_categoryに入れる
-        return context                                                         #GETで取得した値は文字列なので、intで数値に変換する
-    
-
-    def get_queryset(self): #検索関数  query_cateは設置html、post_list.htmlで定義
-        q_word = self.request.GET.get("query_cate")
-        object_list = Post.objects.filter(
-            Q(category__id=q_word))
-
-        return object_list
-
-       #一番右の検索ボタン押した先のページ
-class SearchTag(ListView):
-    model = Post
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        context["category_list"] = Category.objects.all()
-        context["tags_list"] = Tag.objects.all()
-        context["selected_tags"] = int(self.request.GET.get("query_tag"))
-        return context
-    
-
-    def get_queryset(self):
-        q_word = self.request.GET.get("query_tag")
-        object_list = Post.objects.filter(
-            Q(tags__id=q_word))
-
-        return object_list
-
-
-class LikeSort(ListView):
-    model = Post
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        context["category_list"] = Category.objects.all()
-        context["tags_list"] = Tag.objects.all()
-        context["like_list"] = Post.object.like.all()
-        like_list = sorted(like_list)
-        context["selected_like_list"] = int(self.request.GET.get("query_like")) #カテゴリー検索したら、その選択したカテゴリーがなんだったのかselected_categoryに入れる
-        return context                                                         #GETで取得した値は文字列なので、intで数値に変換する
-    
-
-    def get_queryset(self): #検索関数  query_cateは設置html、post_list.htmlで定義
-        q_word = self.request.GET.get("query_like")
-        object_list = Post.objects.filter(
-            Q(like__id=q_word))
-
-        return object_list
 
 
 class Detail(DetailView):

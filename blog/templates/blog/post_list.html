@@ -26,15 +26,15 @@
 <!--formを横並びにする-->
 <div style="display:inline-flex; margin-bottom:30px;">
     
-    <form class="form-inline my-2" method="GET" action="{% url 'blog:search' %}">
+    <form class="form-inline my-2" method="GET" action="{% url 'blog:index' %}">
         <input type="text" class="form-control" name="query" value="{{request.GET.query}}"
           placeholder="タイトル、本文からワード検索" style="width:250px;">
-        <button type="submit" class="btn btn-primary" style="margin-right:50px;">検索</button>
+        <button type="submit" class="btn btn-primary" style="margin-right:0px;">検索</button>
     </form>
     
    
-    <form class="form-inline my-2" method="GET" action="{% url 'blog:search_category' %}">
-        <select name="query_cate" style="height:39px; border-radius:5px; width:250px;">
+    <form class="form-inline my-2" method="GET">
+        <select name="query_cate" style="height:39px; border-radius:5px; width:100px;">
             {% for item in category_list %}
                 {% if item.id == selected_category %}
                     <option selected value="{{ item.id }}">{{ item.name }}</option>
@@ -46,14 +46,14 @@
                 {% endif %} 
             {% endfor %}
         </select>
-        <button type="submit" class="btn btn-primary" style="margin-right:50px;">カテゴリー検索</button>
+        <button type="submit" class="btn btn-primary" style="margin-right:0px;">カテゴリー検索</button>
     </form>
 
 
-    <form class="form-inline my-2" method="GET" action="{% url 'blog:search_tag' %}">
+    <form class="form-inline my-2" method="GET">
         <select name="query_tag" style="height:39px; border-radius:5px;">
             {% for item_tag in tags_list %}
-                {% if item_tag.id == selected_tags %}
+                {% if item_tag.id == selected_tag %}
                     <option selected value="{{ item_tag.id }}">{{ item_tag.name }}</option>
                 {% else %}
                     <option value="{{ item_tag.id }}">{{ item_tag.name }}</option>
@@ -63,14 +63,16 @@
         <button type="submit" class="btn btn-primary">タグ検索</button>
     </form>
 
-    <form class="form-inline my-2" method="GET" action="{% url 'blog:like_sort' %}">
+    <form class="form-inline my-2" method="GET">
         <select name="query_like" style="height:39px; border-radius:5px;">
-            {% for item_like in like_list %}
-               
-                    <option value="{{ item_like }}">{{ item_like.name }}</option>
-                
-            {% endfor %}
-        </select>
+        {% for like in like_list %}
+        {% if like.id == selected_like %}
+                    <option selected value="{{ like.id }}">{{ like }}</option>
+                {% else %}
+        <option value="{{ like.id }}">{{ like }}</option>
+        {% endif %}
+        {% endfor %}
+    </select>
         <button type="submit" class="btn btn-primary">並び替え</button>
     </form>
 
