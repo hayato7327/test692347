@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from blog.forms import UserChangeForm, CommentCreateForm
 import time
+from django.db.models import Count
 
 
 @login_required
@@ -33,45 +34,44 @@ class Index(ListView):
     model = Post
     paginate_by = 5
     
-         #検索関数
+    #検索関数
     def get_queryset(self):
         posts = Post.objects.all() # ここで１度全てのPOSTオブジェクトを取得します。
-
+        
         q_word = self.request.GET.get("query")
         if q_word:
-            object_list = Post.objects.filter(
+            posts = posts.filter(
                 Q(title__icontains=q_word) |  # Q = titleもしくはbodyで検索という意味 title単体検索の場合いらない
                 Q(body__icontains=q_word)     #icontains = フォームに入力した検索ワードにbodyに書かれてる文字列が部分一致したら
                 )
+            return posts
 
-            return object_list
-
-        if "query_cate" in self.request.GET:
+        elif "query_cate" in self.request.GET:
             return posts.filter(category__id=self.request.GET.get("query_cate"))
 
-        if "query_tag" in self.request.GET:
+        elif "query_tag" in self.request.GET:
             return posts.filter(tags__id=self.request.GET.get("query_tag"))
 
+        elif "query_like" in self.request.GET:
+            if self.request.GET["query_like"] == 1:
+                return posts.annotate(like_count=Count("like")).order_by("-like_count")
+            else:
+                return posts.annotate(like_count=Count("like")).order_by("like_count")
+
         else:
-            return posts.order_by("-created") #URLが上記以外(8000/)の時は投稿を全て表示
+            return posts.order_by("-created") #URLが上記以外(トップページ)の時は投稿を新しい順に全て表示
 
-
-        
-
-       
-            
-
-     #プルダウンに項目を渡す関数
+    #プルダウンに項目を渡す関数
     def get_context_data(self, *args, **kwargs):
         time.sleep(1)
         context = super().get_context_data(*args, **kwargs)
         context["category_list"] = Category.objects.all() #トップページIndexのプルダウンに、存在する全てのカテゴリーを渡す
-        context["selected_category"] = int(self.request.GET.get("query_cate")) #カテゴリー検索したら、その選択したカテゴリーがなんだったのかselected_categoryに入れる
+        context["selected_category"] = int(self.request.GET.get("query_cate", 0)) #カテゴリー検索したら、その選択したカテゴリーがなんだったのかselected_categoryに入れる
                                                                                #GETで取得した値は文字列なので、intで数値に変換する
         context["tags_list"] = Tag.objects.all()
-        context["selected_tag"] = int(self.request.GET.get("query_tag"))
-        context["like_list"] = ["いいね多い順", "いいね少ない順"]
-        context["selected_like"] = int(self.request.GET.get("query_like"))
+        context["selected_tag"] = int(self.request.GET.get("query_tag", 0)) #self.request.GET.getが空の時は仮の値0を渡さないと、int() argument must be a string, a bytes-like object or a number, not 'NoneType' エラーになる
+        context["like_list"] = [{"id": 1, "name": "いいね多い順"}, {"id": 2, "name": "いいね少ない順"}]
+        context["selected_like"] = int(self.request.GET.get("query_like", 0))
         return context
 
 

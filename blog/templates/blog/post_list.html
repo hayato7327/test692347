@@ -28,7 +28,7 @@
     
     <form class="form-inline my-2" method="GET" action="{% url 'blog:index' %}">
         <input type="text" class="form-control" name="query" value="{{request.GET.query}}"
-          placeholder="タイトル、本文からワード検索" style="width:250px;">
+               placeholder="タイトル、本文からワード検索" style="width:250px;">
         <button type="submit" class="btn btn-primary" style="margin-right:0px;">検索</button>
     </form>
     
@@ -37,11 +37,11 @@
         <select name="query_cate" style="height:39px; border-radius:5px; width:100px;">
             {% for item in category_list %}
                 {% if item.id == selected_category %}
-                    <option selected value="{{ item.id }}">{{ item.name }}</option>
+            <option selected value="{{ item.id }}">{{ item.name }}</option>
 
                 <!--わかりにくいが、トップページ時のカテゴリー状態の処理-->
                 {% else %}
-                    <option value="{{ item.id }}">{{ item.name }}</option>
+            <option value="{{ item.id }}">{{ item.name }}</option>
 
                 {% endif %} 
             {% endfor %}
@@ -54,9 +54,9 @@
         <select name="query_tag" style="height:39px; border-radius:5px;">
             {% for item_tag in tags_list %}
                 {% if item_tag.id == selected_tag %}
-                    <option selected value="{{ item_tag.id }}">{{ item_tag.name }}</option>
+            <option selected value="{{ item_tag.id }}">{{ item_tag.name }}</option>
                 {% else %}
-                    <option value="{{ item_tag.id }}">{{ item_tag.name }}</option>
+            <option value="{{ item_tag.id }}">{{ item_tag.name }}</option>
                 {% endif %} 
             {% endfor %}
         </select>
@@ -65,14 +65,14 @@
 
     <form class="form-inline my-2" method="GET">
         <select name="query_like" style="height:39px; border-radius:5px;">
-        {% for like in like_list %}
-        {% if like.id == selected_like %}
-                    <option selected value="{{ like.id }}">{{ like }}</option>
+            {% for like in like_list %}
+                {% if like.id == selected_like %}
+            <option selected value="{{ like.id }}">{{ like.name }}</option>
                 {% else %}
-        <option value="{{ like.id }}">{{ like }}</option>
-        {% endif %}
-        {% endfor %}
-    </select>
+            <option value="{{ like.id }}">{{ like.name }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
         <button type="submit" class="btn btn-primary">並び替え</button>
     </form>
 
