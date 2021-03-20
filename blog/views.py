@@ -53,7 +53,7 @@ class Index(ListView):
             return posts.filter(tags__id=self.request.GET.get("query_tag"))
 
         elif "query_like" in self.request.GET:
-            if self.request.GET["query_like"] == 1:
+            if self.request.GET["query_like"] == "1":
                 return posts.annotate(like_count=Count("like")).order_by("-like_count")
             else:
                 return posts.annotate(like_count=Count("like")).order_by("like_count")

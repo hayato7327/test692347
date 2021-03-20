@@ -3,6 +3,7 @@
 {% load static %}
 
 {% block main %}
+
     <form action="" method="POST" id="comment-form">
         {{ form.non_field_errors }}
         {% for field in form %}
@@ -21,6 +22,6 @@
         <a class="button btn-link" href="{% url 'blog:detail' post.pk %}">コメントせずに戻る</a>
     </form>
 
-<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}"/>
 
 {% endblock %}

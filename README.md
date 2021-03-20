@@ -1,16 +1,14 @@
-<<<<<<< HEAD
-
-=======
 # Python/Djangoでブログアプリを作成しました
 
 ## 目次
 
 1.アプリの概要  
 2.作ろうと思った理由  
-3.実装した機能  
-4.工夫した点  
-5.苦労したこと  
-6.常に意識したこと
+3.使用した技術
+4.実装した機能  
+5.工夫した点  
+6.苦労したこと  
+7.常に意識したこと
 
 ### 1.アプリの概要
 
@@ -22,17 +20,24 @@
 
 社会問題になりつつある「ぼっち」 この寂しさは経験者にしかわかりません。そこで、ぼっち経験者のみが集まるコミュニティを作って仲間同士で盛り上がれるコミュニティがあると良いなと思ったので作ってみました。
 
+### 3.使用した技術
 
-### 3.実装した機能
+インフラにheroku
+フレームワークにDjango
+バックエンド言語にPython
+フロントエンド言語にHTML CSS Javascript Jquery/Ajax
+メールサーバーに
 
-インフラにherokuを使用  
+
+### 4.実装した機能
+
 新規会員登録、ログイン、ログアウト、パスワード変更、会員情報変更  
 CRUD機能   
 投稿検索機能  
 いいねボタン  
-無限スクロール機能 
+無限スクロール
 
-### 4.工夫した点
+### 5.工夫した点
 
 1.  タップ操作をなるべく減らしてユーザビリティを向上させたいと思い、ページネーションではなく無限スクロールを実装  
 
@@ -126,7 +131,7 @@ elif "query_tag" in self.request.GET:
             return posts.filter(tags__id=self.request.GET.get("query_tag"))
 ```
 
-4. 無限スクロールで一番下行って、もし一番上に戻りたいと思った時一発で戻れるよう、トップページリンクであるへーダーを固定
+4. 無限スクロールで一番下行って、もし一番上に戻りたいと思った時一発で戻れるよう、トップページリンクであるへーダーをスクロール時も常時固定
 
 `blog/base.html`19行目
 
@@ -134,12 +139,182 @@ elif "query_tag" in self.request.GET:
 style="position:sticky; top:0
 ```
 
-### 5.苦労したこと
+5. ブログ詳細ページにある編集削除ボタンは、投稿者以外に表示させたくないので投稿者じゃなかったら編集削除ボタンが無い別htmlへ飛ばす記述をしました。
+
+`blog/views.py`
+
+```py
+def get_template_names(self): #get_template_names関数は動的にtemplate_nameを指定できる
+        if self.object.accessuser == self.request.user: #もし、Detail.objectのaccessuser(modelsで定義)が、Detailにログインしてるユーザーと一致したら
+            template_name = "blog/post_detail.html" #編集削除ができる通常の移行先、post_detail.htmlを表示させる
+        else:
+            template_name = "blog/other_user_detail.html" #違ったら、編集削除ができないhtml(other_user_detail.html)を表示
+        return template_name
+```
+
+6. 投稿編集フォームページはそのブログの投稿者以外が入れたらまずいので、URLを直接指定してくる悪意あるユーザー対策としてセキュリティを強化
+
+`blog/views.py`
+
+```py
+#もし投稿者じゃないユーザーがURLを直接指定してきて、投稿者じゃないのに編集画面に入ろうとしたら、悪意あるユーザーと判断し「無効なリンクです」と表示させる
+    def get_template_names(self):
+        if self.object.accessuser == self.request.user:
+            template_name = "blog/post_form.html"
+
+        else:
+            template_name = "blog/invalid.html"
+        return template_name
+```
+
+7. テストコードを書いて動作に問題ないかを確認
+
+`tests/test_models.py`
+
+```py
+     #初期状態では何も登録されていないかテスト    
+    def test_is_empty(self):
+        saved_posts = Post.objects.all()
+        self.assertEqual(saved_posts.count(), 0)
+        
+        
+         #レコードを１つ作成するとレコードが１つだけカウントされるかテスト
+    def test_is_count_one(self):
+        category = Category(name="テストカテゴリー")
+        category.save()
+        tag = Tag(name="テストタグ")
+        tag.save()
+        post = Post(category=category,title="test_title",
+                    body="test_body", published=1)
+        post.save()
+        saved_posts = Post.objects.all()
+        self.assertEqual(saved_posts.count(), 1)
+        
+        
+         #内容を指定してデータを保存し、すぐに取り出した時に
+         #保存した時と同じ値が返されることをテスト
+    def test_saving_retrieving_post(self):
+        category = Category(name="テストカテゴリー")
+        category.save()
+        tag = Tag(name="テストタグ")
+        tag.save()
+        post = Post(category=category,title="test_title",
+                    body="test_body", published=1)
+        post.save()
+        
+        saved_posts = Post.objects.all()
+        actual_post = saved_posts[0] #0は、saved_postsというリストから最初の値を取り出すという意味。2番目の値を取り出すなら1
+        
+        self.assertEqual(actual_post.title, "test_title")
+        self.assertEqual(actual_post.body, "test_body")
+        self.assertEqual(actual_post.published, 1)
+```
+
+```tests/test_urls.py```
+
+```py
+     #トップページ/8000に移行するかテスト
+         #blog/post_list.htmlを表示するかテスト
+    def test_index_url(self):
+        user = User.objects.create_user(username = "nomura100",password = "adgjm135")
+        self.client.force_login(user)
+        url = reverse("blog:index")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200) #200はdjangoで決められた正常値であったときに返される数値
+        template = "blog:post_list.html"
+        self.assertTemplateUsed(template)
+       
+        
+         #/detail/<pk>/に移行するかテスト
+         #blog/post_detail.htmlを表示するかテスト
+    def test_detail_url(self):
+        category = Category(name="テストカテゴリー")
+        category.save()
+        tag = Tag(name="テストタグ")
+        tag.save()
+        post = Post(category=category,title="test_title",
+                    body="test_body", published=1)
+        post.save()
+        
+        url = reverse("blog:detail", kwargs={"pk": post.pk})
+        response = self.client.get(url)
+        
+        self.assertEqual(response.status_code, 200)
+        template = "blog/post_detail.html"
+        self.assertTemplateUsed(template)
+        
+        
+         #/create/に移行するかテスト
+         #blog/post_form.htmlを表示するかテスト
+    def test_create_url(self):
+        url = reverse("blog:create")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        template = "blog:post_form.html"
+        self.assertTemplateUsed(template)
+        
+        
+         #/update/<pk>/に移行するかテスト
+         #blog/post_form.htmlを表示するかテスト
+    def test_update_url(self):
+        category = Category(name="テストカテゴリー")
+        category.save()
+        tag = Tag(name="テストタグ")
+        tag.save()
+        post = Post(category=category,title="test_title",
+                    body="test_body", published=1)
+        post.save()
+        
+        url = reverse("blog:update", kwargs={"pk": post.pk})
+        response = self.client.get(url)
+        
+        self.assertEqual(response.status_code, 200)
+        template = "blog:post_form.html"
+        self.assertTemplateUsed(template)
+        
+        
+         #/delete/<pk>/に移行するかテスト
+         #blog/post_comfirm_delete.htmlを表示するかテスト
+    def test_delete_url(self):
+        category = Category(name="テストカテゴリー")
+        category.save()
+        tag = Tag(name="テストタグ")
+        tag.save()
+        post = Post(category=category,title="test_title",
+                    body="test_body", published=1)
+        post.save()
+        
+        url = reverse("blog:delete", kwargs={"pk": post.pk})
+        response = self.client.get(url)
+        
+        self.assertEqual(response.status_code, 200)
+        template = "blog/post_comfirm_delete.html"
+        self.assertTemplateUsed(template)
+```
+
+```tests/views.py```
+
+```py
+       #ログイン時、ユーザー名nomura100が含まれているか確認 
+class Test_Login(TestCase):
+    
+    def test_authenticated(self):
+        user = User.objects.create_user(username = "nomura100",password = "adgjm135")
+        self.client.force_login(user)
+        url = reverse("blog:index")
+        response = self.client.get(url)
+        self.assertEqual(user.username, "nomura100")
+```
+
+7. N+1問題を解消
+
+### 6.苦労したこと
 
 1.  トップページのカテゴリー検索で、初期値カテゴリーがAだったとして、カテゴリーBを選択して検索すると、検索後のページでプルダウンが初期値のカテゴリーAに戻ってしまう  
      → def get_context_data を使って今選択して選んだカテゴリー項目を "selected_category" に保存させ、それをhtmlに記述
 
-`blog/views.py class Index`
+`blog/views.py`
+`class Index`
 
 ```py
 context["selected_category"] = (self.request.GET.get("query_cate"))
@@ -199,4 +374,11 @@ request.GET.getが空の時は、問題のない値0を渡すようにして、�
 context["selected_tag"] = int(self.request.GET.get("query_tag", 0))
 ```
 
->>>>>>> 2470c7ea5d9c1226cd896a513870e3dc6b827c63
+5. テスト実行時、エラー AssertionError: 301 != 200 になる。コードが間違えてると思ったが原因はsettings.pyだった。
+
+```pj_blog/settings.py```
+
+```py
+ #Trueでリクエストの全てをhttpsに変える。テスト時はhttp通信のため、Falseにしないとエラーになる
+SECURE_SSL_REDIRECT = False
+```

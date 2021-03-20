@@ -1,6 +1,7 @@
-$(".like-btn").click(function(e){
+$(document).on("click",".like-btn", function(e) {
   e.preventDefault()
   const this_ = $(this);
+  console.log(this_)
   const data_id = this_.attr("data-id")
   const like_cnt = $("#like"+data_id);
   const likeUrl = this_.attr("data-href");

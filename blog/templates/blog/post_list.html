@@ -1,57 +1,57 @@
 {% extends "blog/base.html" %}
-
+{% load url_replace %}
 {% load static %} <!--ループ内に記載しない。基本最上部に記載する-->
-
+​
 {% block main %}
-
+​
 <div style="display:inline-flex;"><h2><p>⭐︎ 会員ページ ⭐︎</p></h2>
     <h3 style="margin-left: 550px;"> <a href="{% url 'blog:mypage' %}">🔑 マイページ 🔑</a> </h3>
 </div>
 <p>ぼっちの{{ user }}さん、おかえりなさい🤗</p>
 <p>8000/adminで管理者用画面へ</p>
 <p><a href="{% url 'logout' %}">ログアウト</a></p>
-
+​
 <h2><p>⭐︎ 新規投稿 ⭐︎</p></h2>
 <p>{{ user }}さんが現在、過去に経験したぼっち経験はなんですか？</p>
-
+​
 <div style="display:inline-flex;">
     <p>エピソードなどを投稿して会員同士で傷を舐め合いませんか？</p>
     <h5 style="margin-left: 30px;"><p><a href="{% url 'blog:create' %}"> 👉投稿する👈 </a></p></h5>
 </div>
-
-
-
+​
+​
+​
 <h2><p>⭐︎ ブログ一覧 ⭐︎</p></h2>
-
+​
 <!--formを横並びにする-->
 <div style="display:inline-flex; margin-bottom:30px;">
     
     <form class="form-inline my-2" method="GET" action="{% url 'blog:index' %}">
         <input type="text" class="form-control" name="query" value="{{request.GET.query}}"
                placeholder="タイトル、本文からワード検索" style="width:250px;">
-        <button type="submit" class="btn btn-primary" style="margin-right:0px;">検索</button>
+        <button type="submit" class="btn btn-primary" style="margin-right: 26px;">検索</button>
     </form>
     
    
     <form class="form-inline my-2" method="GET">
-        <select name="query_cate" style="height:39px; border-radius:5px; width:100px;">
+        <select name="query_cate">
             {% for item in category_list %}
                 {% if item.id == selected_category %}
             <option selected value="{{ item.id }}">{{ item.name }}</option>
-
+​
                 <!--わかりにくいが、トップページ時のカテゴリー状態の処理-->
                 {% else %}
             <option value="{{ item.id }}">{{ item.name }}</option>
-
+​
                 {% endif %} 
             {% endfor %}
         </select>
-        <button type="submit" class="btn btn-primary" style="margin-right:0px;">カテゴリー検索</button>
+        <button type="submit" class="btn btn-primary" style="margin-right: 26px;">カテゴリー検索</button>
     </form>
-
-
+​
+​
     <form class="form-inline my-2" method="GET">
-        <select name="query_tag" style="height:39px; border-radius:5px;">
+        <select name="query_tag">
             {% for item_tag in tags_list %}
                 {% if item_tag.id == selected_tag %}
             <option selected value="{{ item_tag.id }}">{{ item_tag.name }}</option>
@@ -60,11 +60,11 @@
                 {% endif %} 
             {% endfor %}
         </select>
-        <button type="submit" class="btn btn-primary">タグ検索</button>
+        <button type="submit" class="btn btn-primary" style="margin-right: 26px;">タグ検索</button>
     </form>
-
+​
     <form class="form-inline my-2" method="GET">
-        <select name="query_like" style="height:39px; border-radius:5px;">
+        <select name="query_like">
             {% for like in like_list %}
                 {% if like.id == selected_like %}
             <option selected value="{{ like.id }}">{{ like.name }}</option>
@@ -75,17 +75,17 @@
         </select>
         <button type="submit" class="btn btn-primary">並び替え</button>
     </form>
-
+​
 </div>
 <!--form外に記述-->
 {% comment %} {% csrf_token %} {% endcomment %}
-
+​
 <div class="infinite-container">
     {% for post in object_list %}
     <div class="infinite-item">
         <a href="{% url 'blog:detail' post.id %}">{{ post.title }}</a> 
         <p>投稿者：{{ post.accessuser }}</p>
-
+​
          <!--もしいいねしていたユーザーがログインユーザーだったら、いいねボタンを光らせる。これにより、リロードしたり再度ログイン時、いいねしたボタンは常に光る-->
          <!--like-btnと{の間にスペース無いと、like-btnonになってしまう-->
          <!--request.userでログインユーザーを取得可能、post.like.allでいいねしてる全ユーザー取得可能-->
@@ -97,22 +97,23 @@
    </div>
    {% endfor %}
 </div>
-
+​
 <div class="loading" style="display: none;">
     読み込み中...
 </div>
-
+​
 {% if page_obj.has_next %}
-<a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}">さらに読み込む</a>
+<a class="infinite-more-link" href="?{%  url_replace request 'page' page_obj.next_page_number %}">さらに読み込む</a>
 {% endif %}
-
+​
+<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}"/>
 <link rel="stylesheet" type="text/css" href="{% static 'like.css' %}" />
 <link href="{% static 'fontawesome_free/css/all.min.css' %}" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="{% static 'like.js' %}"></script> <!--js読み込み時は、scriptタグを使用。srcで読み込みファイル名を指定-->
-
+​
 {% endblock %}
-
-
+​
+​
 {% block extrajs %}
 <script>
 var infinite = new Waypoint.Infinite({

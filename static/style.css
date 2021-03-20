@@ -1,12 +1,31 @@
 .helptext {
     font-size: 14px;
-}
-
+  }
+  
 .field {
     margin-bottom: 24px;
-}
-
+  }
+  
 .field > * {
     display: block;
     width: 100%;
-}
+  }
+
+select {
+    /* 👇デフォルトのスタイルを解除 */
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    /* 👇スタイル */
+    width: 135px; /* 幅 */
+    padding: 0.6em 1.5em 0.6em 0.5em; /* 文字周りの余白 */
+    cursor: pointer; /* カーソルを指に */
+    line-height: 1.2; /* 行高 */
+    font-size: 0.95em; /* フォントサイズ */
+    border-radius: 4px; /* 角丸 */
+    /* 👇三角マークを作る */
+    background-image: linear-gradient(45deg, transparent 50%, rgba(0,0,0,0.4) 50%),  linear-gradient(135deg, rgba(0,0,0,0.4) 50%, transparent 50%);
+    background-size: 5px 5px, 5px 5px;
+    background-position: calc(100% - 15px) 50%, calc(100% - 10px) 50%;
+    background-repeat: no-repeat;
+  }
