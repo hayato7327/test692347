@@ -29,15 +29,15 @@ class Tag(models.Model):
 
 class Post(models.Model):
     created = models.DateTimeField(
-        auto_now_add=True,
-        editable=False,
+        auto_now_add=True, #投稿した時に、自動で投稿日時を保存できる
+        editable=False, #ユーザーに編集できなくする
         blank=False,
         null=False,
         verbose_name="作成日"
     )
     
     updated = models.DateTimeField(
-        auto_now=True,
+        auto_now=True, #編集した日時を保存する
         editable=False,
         blank=False,
         null=False,
@@ -46,7 +46,7 @@ class Post(models.Model):
         
     title = models.CharField(
         max_length=255,
-        blank=False,
+        blank=False, #タイトルを空白で投稿はできなくする
         null=False,
         verbose_name="タイトル"
     )
@@ -59,7 +59,7 @@ class Post(models.Model):
      #ひとつの投稿にひとつしか付けれないからForeignKey
     category = models.ForeignKey(
         Category,
-        on_delete=models.CASCADE,
+        on_delete=models.CASCADE, #カテゴリー1を選択した投稿がある状態で、カテゴリー1を削除したら投稿ごと削除する設定
         verbose_name="カテゴリー"
     )
      #ひとつの投稿に複数付けれるからManyToManyField
@@ -122,6 +122,9 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
 		verbose_name="コメントユーザー"
 	)
+
+    def get_absolute_url(self):
+        return reverse("blog:index")
 
     def __str__(self):
         return self.text

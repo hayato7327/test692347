@@ -19,6 +19,8 @@
         {% csrf_token %}
 
         <button type="submit" class="btn btn-primary" style="margin-right:50px;">コメントする</button>
+
+        <!--postはclass CommentUpdateで定義-->
         <a class="button btn-link" href="{% url 'blog:detail' post.pk %}">コメントせずに戻る</a>
     </form>
 

@@ -36,7 +36,7 @@
 
 <p>🔔 コメント投稿者 :【{{ comment.accessuser }}】</p>
 <p>{{ comment | linebreaksbr }}</p>
-<p><a href="{% url 'blog:comment_create' text.pk %}">編集</a></p>
+<p><a href="{% url 'blog:comment_update' comment.pk %}">編集</a></p>
 
 {% endfor %}
 

@@ -18,6 +18,5 @@ urlpatterns = [
     path('blog/', include('blog.urls')), #blog/と書かれたurlだったら、blogアプリのurls.pyに処理を移行させる
     path('', include("django.contrib.auth.urls")), #post_list.htmlのurl 'logout'など、デフォルトの移行先処理を使うために必要
     path("signup/", views.SignUpView.as_view(), name="signup"),
-    path('activate/<uidb64>/<token>/', views.ActivateView.as_view(),
-        name='activate'),
+    path('activate/<uidb64>/<token>/', views.ActivateView.as_view(),name='activate'),
 ]

@@ -113,7 +113,6 @@ class CommentCreate(CreateView):
         comment.target = post
         comment.accessuser = self.request.user
         comment.save()
-        return redirect("blog:detail", pk=post_pk)
         return super().form_valid(form)
 
 
@@ -145,7 +144,28 @@ class Update(UpdateView):
 
         else:
             template_name = "blog/invalid.html"
+
         return template_name
+
+
+class CommentUpdate(UpdateView):
+    model = Comment
+    form_class = CommentCreateForm
+
+    def get_template_names(self):
+        if self.object.accessuser == self.request.user:
+            template_name = "blog/comment_form.html"
+
+        else:
+            template_name = "blog/invalid.html"
+
+        return template_name
+
+         #class CommentUpdateを実行する直前のコメント内容のデータをpostに保存する
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["post"] = self.object.target
+        return context
     
 
 class Delete(DeleteView):
@@ -162,7 +182,6 @@ class Delete(DeleteView):
     
     # 削除したあとに移動する先（トップページ）
     success_url = "/"
-    
     
     
 class LikeButton(APIView):

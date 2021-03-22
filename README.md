@@ -306,7 +306,20 @@ class Test_Login(TestCase):
         self.assertEqual(user.username, "nomura100")
 ```
 
-7. N+1問題を解消
+7. 管理画面のブログ一覧画面Postsを開いた時、読み込みが遅かったのでなぜかと思ったらN+1問題が発生していた。
+
+```blog/admin.py```
+
+```py
+list_display = ("id", "title", "category", "tags_summary", "published", "created", "updated")
+```
+ブログが100件あると仮定する。ここでcategoryを取得する時、Post一覧取得にDBアクセス1回+100回DBアクセスが入ってしまい、読み込みが遅くなっていた。
+
+```py
+list_display = ("id", "title", "category", "tags_summary", "published", "created", "updated")
+list_select_related = ("category", )
+```
+list_select_related関数でcategoryを指定することにより、N+1問題を解消
 
 ### 6.苦労したこと
 
