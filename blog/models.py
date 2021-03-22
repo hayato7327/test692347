@@ -122,9 +122,9 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
 		verbose_name="コメントユーザー"
 	)
-
+         #model=Commentにしたviewsクラスの、コメントするボタン押した先のhtml指定
     def get_absolute_url(self):
-        return reverse("blog:index")
+        return reverse("blog:detail", kwargs={"pk": self.target.id})
 
     def __str__(self):
         return self.text

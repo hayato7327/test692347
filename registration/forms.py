@@ -6,8 +6,6 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
-User = get_user_model()
-
 subject = "ドラマブログ共有コミュニティ登録確認"
 message_template = """
 ご登録ありがとうございます。
@@ -23,7 +21,7 @@ def get_activate_url(user):
 
 class SignUpForm(UserCreationForm):
     class Meta:
-        model = User
+        model = get_user_model()
         fields = ("username", "email", "password1", "password2")
 
     def save(self, commit=True):
@@ -44,7 +42,7 @@ class SignUpForm(UserCreationForm):
 def activate_user(uidb64, token):    
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
-        user = User.objects.get(pk=uid)
+        user = get_user_model().objects.get(pk=uid)
     except Exception:
         return False
 

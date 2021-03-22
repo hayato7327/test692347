@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 
 class SignUpView(CreateView):
     form_class = SignUpForm
-    success_url = reverse_lazy("login")
+    success_url = reverse_lazy("index")
     template_name = "registration/signup.html"
     
     

@@ -57,7 +57,6 @@ class Index(ListView):
                 return posts.annotate(like_count=Count("like")).order_by("-like_count")
             else:
                 return posts.annotate(like_count=Count("like")).order_by("like_count")
-
         else:
             return posts.order_by("-created") #URLが上記以外(トップページ)の時は投稿を新しい順に全て表示
 
@@ -141,7 +140,6 @@ class Update(UpdateView):
     def get_template_names(self):
         if self.object.accessuser == self.request.user:
             template_name = "blog/post_form.html"
-
         else:
             template_name = "blog/invalid.html"
 
@@ -155,7 +153,6 @@ class CommentUpdate(UpdateView):
     def get_template_names(self):
         if self.object.accessuser == self.request.user:
             template_name = "blog/comment_form.html"
-
         else:
             template_name = "blog/invalid.html"
 
@@ -175,13 +172,28 @@ class Delete(DeleteView):
     def get_template_names(self):
         if self.object.accessuser == self.request.user:
             template_name = "blog/post_confirm_delete.html"
-
         else:
             template_name = "blog/invalid.html"
         return template_name
     
     # 削除したあとに移動する先（トップページ）
     success_url = "/"
+
+
+class CommentDelete(DeleteView):
+    model = Comment
+
+    def get_template_names(self):
+        if self.object.accessuser == self.request.user:
+            template_name = "blog/comment_delete.html"
+        else:
+            template_name = "blog/invalid.html"
+        return template_name
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["post"] = self.object.target
+        return context
     
     
 class LikeButton(APIView):

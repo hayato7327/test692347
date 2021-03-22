@@ -1,0 +1,15 @@
+{% extends "blog/base.html" %}
+
+{% block main %}
+
+<h2>削除確認</h2>
+<p>{{ object.text }}</p>
+<p>この書き込みを本当に削除してもよろしいですか？</p>
+
+<form method="post">
+    {% csrf_token %}
+<input type="submit" value="削除" class="btn btn-danger" style="margin-right: 50px;"/>
+<a class="button btn-link" href="{% url 'blog:detail' post.pk %}">削除せずに戻る</a>
+</form>
+
+{% endblock %}

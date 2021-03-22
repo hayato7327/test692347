@@ -16,6 +16,7 @@ urlpatterns = [
     path("update/<int:pk>/", views.Update.as_view(), name="update"),
     path("comment_update/<int:pk>/", views.CommentUpdate.as_view(), name="comment_update"),
     path("delete/<int:pk>/", views.Delete.as_view(), name="delete"),
+    path("comment_delete/<int:pk>/", views.CommentDelete.as_view(), name="comment_delete"),
      #いいね情報を格納するページ
     path("like/<int:pk>/", LikeButton.as_view(), name="like_api"),
 ]
