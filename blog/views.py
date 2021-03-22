@@ -194,6 +194,8 @@ class CommentDelete(DeleteView):
         context = super().get_context_data(**kwargs)
         context["post"] = self.object.target
         return context
+
+        success_url = "/"
     
     
 class LikeButton(APIView):
