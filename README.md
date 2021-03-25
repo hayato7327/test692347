@@ -23,6 +23,7 @@
 ### 3.使用した技術
 
 インフラにheroku
+データベースにSQLite3
 フレームワークにDjango
 バックエンド言語にPython
 フロントエンド言語にHTML CSS Javascript Jquery/Ajax
@@ -99,60 +100,29 @@ $(".like-btn").click(function(e){
     </button>
 ```
 
+3. 管理画面のブログ一覧画面Postsを開いた時、読み込みが遅かったのでなぜかと思ったらN+1問題が発生していた。
 
-
-3.  ユーザーが探したいブログをすぐ探せるよう、さまざまなタイプの検索フォームを実装
-
-`blog/views.py`
-
-def get_querysetを使い、タイトル、本文からワード検索
-```py
-def get_queryset(self):
-        posts = Post.objects.all() # ここで１度全てのPOSTオブジェクトを取得します。
-        
-        q_word = self.request.GET.get("query")
-        if q_word:
-            posts = posts.filter(
-                Q(title__icontains=q_word) |  # Q = titleもしくはbodyで検索という意味 title単体検索の場合いらない
-                Q(body__icontains=q_word)     #icontains = フォームに入力した検索ワードにbodyに書かれてる文字列が部分一致したら
-                )
-            return posts
-```
-
-カテゴリーで検索も可能
-```py
-elif "query_cate" in self.request.GET:
-            return posts.filter(category__id=self.request.GET.get("query_cate"))
-```
-
-付いてるタグでも検索可能
-```py
-elif "query_tag" in self.request.GET:
-            return posts.filter(tags__id=self.request.GET.get("query_tag"))
-```
-
-4. 無限スクロールで一番下行って、もし一番上に戻りたいと思った時一発で戻れるよう、トップページリンクであるへーダーをスクロール時も常時固定
-
-`blog/base.html`19行目
+```blog/admin.py```
 
 ```py
-style="position:sticky; top:0
+list_display = ("id", "title", "category", "tags_summary", "published", "created", "updated")
 ```
-
-5. ブログ詳細ページにある編集削除ボタンは、投稿者以外に表示させたくないので投稿者じゃなかったら編集削除ボタンが無い別htmlへ飛ばす記述をしました。
-
-`blog/views.py`
+ブログが100件あると仮定する。ここでcategoryを取得する時、Post一覧取得にDBアクセス1回+100回DBアクセスが入ってしまい、読み込みが遅くなっていた。
 
 ```py
-def get_template_names(self): #get_template_names関数は動的にtemplate_nameを指定できる
-        if self.object.accessuser == self.request.user: #もし、Detail.objectのaccessuser(modelsで定義)が、Detailにログインしてるユーザーと一致したら
-            template_name = "blog/post_detail.html" #編集削除ができる通常の移行先、post_detail.htmlを表示させる
-        else:
-            template_name = "blog/other_user_detail.html" #違ったら、編集削除ができないhtml(other_user_detail.html)を表示
-        return template_name
+list_display = ("id", "title", "category", "tags_summary", "published", "created", "updated")
+list_select_related = ("category", )
+```
+list_select_related関数でcategoryを指定することにより、N+1問題を解消
+
+tag取得時も同様なので、prefetch_relatedでtagをあらかじめ事前ロードすることにより、N+1問題を解消
+```py
+def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.prefetch_related("tags")
 ```
 
-6. 投稿編集フォームページはそのブログの投稿者以外が入れたらまずいので、URLを直接指定してくる悪意あるユーザー対策としてセキュリティを強化
+4. 投稿編集フォームページはそのブログの投稿者以外が入れたらまずいので、URLを直接指定してくる悪意あるユーザー対策としてセキュリティを強化
 
 `blog/views.py`
 
@@ -167,7 +137,7 @@ def get_template_names(self): #get_template_names関数は動的にtemplate_name
         return template_name
 ```
 
-7. テストコードを書いて動作に問題ないかを確認
+5. テストコードを書いて動作に問題ないかを確認
 
 `tests/test_models.py`
 
@@ -306,20 +276,43 @@ class Test_Login(TestCase):
         self.assertEqual(user.username, "nomura100")
 ```
 
-7. 管理画面のブログ一覧画面Postsを開いた時、読み込みが遅かったのでなぜかと思ったらN+1問題が発生していた。
+6.  ユーザーが探したいブログをすぐ探せたらいいなと思い、さまざまなタイプの検索フォームを実装
 
-```blog/admin.py```
+`blog/views.py`
+
+def get_querysetを使い、タイトル、本文からワード検索
+```py
+def get_queryset(self):
+        posts = Post.objects.all() # ここで１度全てのPOSTオブジェクトを取得します。
+        
+        q_word = self.request.GET.get("query")
+        if q_word:
+            posts = posts.filter(
+                Q(title__icontains=q_word) |  # Q = titleもしくはbodyで検索という意味 title単体検索の場合いらない
+                Q(body__icontains=q_word)     #icontains = フォームに入力した検索ワードにbodyに書かれてる文字列が部分一致したら
+                )
+            return posts
+```
+
+カテゴリーで検索も可能
+```py
+elif "query_cate" in self.request.GET:
+            return posts.filter(category__id=self.request.GET.get("query_cate"))
+```
+
+付いてるタグでも検索可能
+```py
+elif "query_tag" in self.request.GET:
+            return posts.filter(tags__id=self.request.GET.get("query_tag"))
+```
+
+7. 無限スクロールで一番下行って、もし一番上に戻りたいと思った時一発で戻れるよう、トップページリンクであるへーダーをスクロール時も常時固定
+
+`blog/base.html`19行目
 
 ```py
-list_display = ("id", "title", "category", "tags_summary", "published", "created", "updated")
+style="position:sticky; top:0
 ```
-ブログが100件あると仮定する。ここでcategoryを取得する時、Post一覧取得にDBアクセス1回+100回DBアクセスが入ってしまい、読み込みが遅くなっていた。
-
-```py
-list_display = ("id", "title", "category", "tags_summary", "published", "created", "updated")
-list_select_related = ("category", )
-```
-list_select_related関数でcategoryを指定することにより、N+1問題を解消
 
 ### 6.苦労したこと
 
@@ -340,7 +333,7 @@ context["selected_category"] = (self.request.GET.get("query_cate"))
                     <option selected value="{{ item.id }}">{{ item.name }}</option>
 ```
 
-2.　いいねボタン押した状態でリロードすると、いいねしたときに点くcssの色が消えるため、「もし、ログインユーザーがいいねしていたらボタンのcssをオンにする」という記述をしました。  
+2. 　いいねボタン押した状態でリロードすると、いいねしたときに点くcssの色が消えるため、「もし、ログインユーザーがいいねしていたらボタンのcssをオンにする」という記述をしました。  
 
 `blog/post_list.html`
 

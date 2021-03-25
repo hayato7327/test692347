@@ -1,4 +1,5 @@
 {% extends "blog/base.html" %}
+{% load l10n tz %}
 {% load url_replace %}
 {% load static %} <!--ループ内に記載しない。基本最上部に記載する-->
 ​
@@ -84,7 +85,7 @@
     {% for post in object_list %}
     <div class="infinite-item">
         <a href="{% url 'blog:detail' post.id %}">{{ post.title }}</a> 
-        <p>投稿者：{{ post.accessuser }}</p>
+        <p>投稿者：{{ post.accessuser }} <time style="margin-left: 50px;">{{ post.updated|localtime|localize }}</time></p>
 ​
          <!--もしいいねしていたユーザーがログインユーザーだったら、いいねボタンを光らせる。これにより、リロードしたり再度ログイン時、いいねしたボタンは常に光る-->
          <!--like-btnと{の間にスペース無いと、like-btnonになってしまう-->

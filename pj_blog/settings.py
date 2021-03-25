@@ -110,8 +110,9 @@ AUTH_USER_MODEL = 'registration.User'
  #開発用のURLを記載(ターミナルに表示される)
 FRONTEND_URL = 'http://127.0.0.1:8000/'
 
-#EMAIL_HOST = ''
-#EMAIL_PORT = 
-#EMAIL_HOST_USER = 'apikey'
-#EMAIL_HOST_PASSWORD = ''
+#EMAIL_HOST = "smtp.mailgun.org"
+#EMAIL_PORT = 587
+#EMAIL_HOST_USER = "apikey"
+#EMAIL_HOST_PASSWORD = "key-cfa96ba69e27e3a2f5ecfa8d1248e8f7"
 #EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

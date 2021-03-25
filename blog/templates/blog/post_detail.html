@@ -27,8 +27,12 @@
 </button>
 
 <div style="display:inline-flex;">
-<p><a style="margin-right:30px;" href="{% url 'blog:update' object.pk %}">編集</a></p>
-<p><a href="{% url 'blog:delete' object.pk %}">削除</a></p>
+
+    {% if post.accessuser == request.user %}
+    <p><a style="margin-right:30px;" href="{% url 'blog:update' object.pk %}">編集</a></p>
+    <p><a href="{% url 'blog:delete' object.pk %}">削除</a></p>
+    {% endif %}
+    
 </div>
 
 <p style="margin-bottom: 70px;"><a href="{% url 'blog:comment_create' post.pk %}" target="_blank" rel="nofollow">ブログにコメントする</a></p>
@@ -36,12 +40,16 @@
 
 {% for comment in object.comment_set.all %}
 
-<p>🔔 コメント投稿者 :【{{ comment.accessuser }}】</p>
+<p>🔔 コメント投稿者 :【{{ comment.accessuser }}】<time style="margin-left: 50px;">{{ post.updated|localtime|localize }}</time></p>
 <p>{{ comment | linebreaksbr }}</p>
 
 <div style="display:inline-flex;">
-<a style="margin-right:30px;" href="{% url 'blog:comment_update' comment.pk %}">編集</a>
-<p><a href="{% url 'blog:comment_delete' comment.pk %}">削除</a></p>
+
+    {% if comment.accessuser == request.user %}
+    <a style="margin-right:30px;" href="{% url 'blog:comment_update' comment.pk %}">編集</a>
+    <p><a href="{% url 'blog:comment_delete' comment.pk %}">削除</a></p>
+    {% endif %}
+
 </div>
 
 {% endfor %}

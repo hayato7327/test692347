@@ -68,23 +68,21 @@ class Post(models.Model):
         blank=True,
         verbose_name="タグ"
     )
-        
-    published = models.BooleanField(
-        default=True,
-        verbose_name="公開する"
-    )
+
      #ForeignKeyの引数は紐付けたいモデル項目(今回はユーザーIDを持たせたいからregistration/models/User)
     accessuser = models.ForeignKey(
         get_user_model(),
         blank=True,
         null=True,
         on_delete=models.CASCADE,
+        verbose_name="投稿者"
     )
      # いいねボタン  #ひとつの投稿のいいねに複数のユーザーのいいね付けれるようManyToManyField
     like = models.ManyToManyField(
         get_user_model(),
         blank=True,
-        related_name="post_like"
+        related_name="post_like",
+        verbose_name="いいね"
     )
 
      #投稿ボタン押した先に移行するhtmlの設定

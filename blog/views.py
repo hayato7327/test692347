@@ -12,6 +12,7 @@ from django.views.decorators.http import require_POST
 from blog.forms import UserChangeForm, CommentCreateForm
 import time
 from django.db.models import Count
+from django.urls import reverse
 
 
 @login_required
@@ -88,15 +89,7 @@ class Mypage(ListView):
 
 
 class Detail(DetailView):
-    model = Post                                             
-                                                             
-     #ユーザーIDにより処理を変化
-    def get_template_names(self): #get_template_names関数は動的にtemplate_nameを指定できる
-        if self.object.accessuser == self.request.user: #もし、Detail.objectのaccessuser(modelsで定義)が、Detailにログインしてるユーザーと一致したら
-            template_name = "blog/post_detail.html" #編集削除ができる通常の移行先、post_detail.htmlを表示させる
-        else:
-            template_name = "blog/other_user_detail.html" #違ったら、編集削除ができないhtml(other_user_detail.html)を表示
-        return template_name
+    model = Post
 
 
 class CommentCreate(CreateView):
@@ -195,7 +188,8 @@ class CommentDelete(DeleteView):
         context["post"] = self.object.target
         return context
 
-        success_url = "/"
+    def get_success_url(self):
+        return reverse("blog:detail", kwargs={"pk": self.object.target.id})
     
     
 class LikeButton(APIView):

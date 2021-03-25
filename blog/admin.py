@@ -1,28 +1,13 @@
 from django.contrib import admin
 from django import forms
 from . import models
-
-
-class PostTitleFilter(admin.SimpleListFilter):
-    title = "本文"
-    parameter_name = "body_contains"
-
-    def queryset(self, request, queryset):
-        if self.value() is not None:
-            return queryset.filter(body__icontains=self.value())
-        return queryset
-
-    def lookups(self, request, model_admin):
-        return [
-            ("ブログ", "「ブログ」を含む"),
-            ("日記", "「日記」を含む"),
-            ("開発", "「開発」を含む"),
-        ]
+from django.contrib.auth import get_user_model
+from django.contrib.auth.admin import UserAdmin
 
 
 class PostInline(admin.TabularInline):
     model = models.Post
-    fields = ("title", "body")
+    fields = ("title", "body","tags")
     extra = 1
 
 
@@ -41,11 +26,6 @@ class PostAdminForm(forms.ModelForm):
         labels = {
             "title": "ブログタイトル"
         }
-    
-    def clean(self):
-        body = self.cleaned_data.get("body")
-        if "死" in body:
-            raise forms.ValidationError("不適切な単語が含まれています")
         
 
 @admin.register(models.Post)
@@ -65,37 +45,34 @@ class PostAdmin(admin.ModelAdmin):
     filter_horizontal = ("tags",)
         
     
-    list_display = ("id", "title", "category", "tags_summary", "published", "created", "updated")
-    list_select_related = ("category", )
+    list_display = ("id", "title", "category", "tags_summary", "accessuser", "created", "updated")
+    list_select_related = ("category", ) # N+1問題を解消
     list_editable = ("title", "category")
-    search_fields = ("title", "category__name", "tags__name", "created", "updated")
+    search_fields = ("title", "category__name", "tags__name", "body", "created", "updated")
     ordering = ("-updated", "-created")
-    list_filter = (PostTitleFilter, "category", "tags", "created", "updated")
+    list_filter = ("category", "tags", "created", "updated")
     
     def tags_summary(self, obj):
         qs = obj.tags.all()
         label = ', '.join(map(str, qs))
         return label
         
-    tags_summary.short_description = "tags"
+    tags_summary.short_description = "タグ"
     
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.prefetch_related("tags")
-        
-    actions = ["publish", "unpublish"]
-
-    def publish(self, request, queryset):
-        queryset.update(published=True)
-        
-    publish.short_description = "公開する"
-        
-    def unpublish(self, request, queryset):
-        queryset.update(published=False)
-        
-    unpublish.short_description = "下書きに戻す"
+        return qs.prefetch_related("tags") # N+1問題を解消
 
 
 @admin.register(models.Comment)
-class Admin(admin.ModelAdmin):
+class CommentAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(get_user_model())
+class UserAdmin(UserAdmin):
+
+    fieldsets = [
+        (None, {"fields": ("username", )}),
+        ("メールアドレス", {"fields": ("email", )}),
+    ]
