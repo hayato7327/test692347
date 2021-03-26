@@ -5,6 +5,9 @@ from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.auth import login
+from django import forms
+
 
 subject = "ぼっち救出コミュニティ登録確認"
 message_template = """
@@ -20,9 +23,23 @@ def get_activate_url(user):
 
 
 class SignUpForm(UserCreationForm):
+    username = forms.CharField(
+        max_length=20,
+        required=False,
+        help_text="20文字以下で入力して下さい。",
+        label="ユーザー名"
+    )
+
+    email = forms.EmailField(
+        max_length=50,
+        help_text="認証メールを受信できるメールアドレスを入力してください。",
+        label="メールアドレス"
+    )
+    
     class Meta:
         model = get_user_model()
         fields = ("username", "email", "password1", "password2")
+
 
     def save(self, commit=True): # フォームに入力した情報を本セーブする
         user = super().save(commit=False) # デフォルトでemailはセーブできないのでまずはuserに"username", "password1", "password2"を仮セーブして入れる
@@ -44,7 +61,7 @@ class SignUpForm(UserCreationForm):
         return user # このuserはUserオブジェクト
 
         
-def activate_user(uidb64, token):    
+def activate_user(uidb64, token, request):    
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
         user = get_user_model().objects.get(pk=uid)
@@ -54,6 +71,7 @@ def activate_user(uidb64, token):
     if default_token_generator.check_token(user, token): # ユーザーが見つかったら
         user.is_active = True
         user.save()
+        login(request, user, backend="django.contrib.auth.backends.ModelBackend") # 認証リンクをクリックしたら、自動でログイン化
         return True
     
     return False

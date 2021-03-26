@@ -28,6 +28,6 @@ class ActivateView(TemplateView):
     
     def get(self, request, uidb64, token, *args, **kwargs):
         # 認証トークンを検証して、
-        result = activate_user(uidb64, token)
+        result = activate_user(uidb64, token, request)
         # コンテクストのresultにTrue/Falseの結果を渡します。
         return super().get(request, result=result, **kwargs)
