@@ -8,7 +8,6 @@
 4.実装した機能  
 5.工夫した点  
 6.苦労したこと  
-7.常に意識したこと  
 
 ### 1.アプリの概要
 
@@ -106,9 +105,7 @@ $(".like-btn").click(function(e){
 ```py
 list_display = ("id", "title", "category", "tags_summary", "published", "created", "updated")
 ```
-ブログが100件あると仮定する。ここでcategoryを取得する時、Post一覧取得にDBアクセス1回+100回DBアクセスが入ってしまい、読み込みが遅くなっていた。
-
-  
+↑ ブログが100件あると仮定する。ここでcategoryを取得する時、Post一覧取得にDBアクセス1回+100回DBアクセスが入ってしまい、読み込みが遅くなっていた。
 
 ```py
 list_display = ("id", "title", "category", "tags_summary", "published", "created", "updated")

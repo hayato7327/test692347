@@ -9,14 +9,13 @@
     <h3 style="margin-left: 550px;"> <a href="{% url 'blog:mypage' %}">🔑 マイページ 🔑</a> </h3>
 </div>
 <p>ぼっちの{{ user }}さん、おかえりなさい🤗</p>
-<p>8000/adminで管理者用画面へ</p>
 <p><a href="{% url 'logout' %}">ログアウト</a></p>
 ​
 <h2><p>⭐︎ 新規投稿 ⭐︎</p></h2>
-<p>{{ user }}さんが現在、過去に経験したぼっち経験はなんですか？</p>
+<p>{{ user }}さんが現在、過去に経験したぼっちの経験はなんですか？</p>
 ​
 <div style="display:inline-flex;">
-    <p>エピソードなどを投稿して会員同士で傷を舐め合いませんか？</p>
+    <p>エピソードなどを投稿して会員同士で語り合いませんか？</p>
     <h5 style="margin-left: 30px;"><p><a href="{% url 'blog:create' %}"> 👉投稿する👈 </a></p></h5>
 </div>
 ​
