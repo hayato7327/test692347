@@ -26,15 +26,17 @@
 使用言語にPython  
 フレームワークにDjango   
 フロントエンド言語にHTML CSS Javascript jquery/Ajax  
-メールサーバーにmailgun  
+メールサーバーにGmail  
 
 ### 4.実装した機能
 
 新規会員登録、ログイン、ログアウト、パスワード変更、会員情報変更  
 CRUD機能   
+コメント機能  
 投稿検索機能  
 いいねボタン  
 無限スクロール  
+管理画面からできる編集機能  
 
 ### 5.工夫した点
 
@@ -326,7 +328,7 @@ elif "query_like" in self.request.GET:
 `registration/forms.py`74行目
 
 ```py
-login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+login(request, user, backend="django.contrib.auth.backends.ModelBackend")
 ```
 
 

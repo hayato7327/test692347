@@ -10,7 +10,6 @@ from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from blog.forms import UserChangeForm, CommentCreateForm
-import time
 from django.db.models import Count
 from django.urls import reverse
 
@@ -63,7 +62,6 @@ class Index(ListView):
 
     #プルダウンに項目を渡す関数
     def get_context_data(self, *args, **kwargs):
-        time.sleep(1)
         context = super().get_context_data(*args, **kwargs)
         context["category_list"] = Category.objects.all() #トップページIndexのプルダウンに、存在する全てのカテゴリーを渡す
         context["selected_category"] = int(self.request.GET.get("query_cate", 0)) #カテゴリー検索したら、その選択したカテゴリーがなんだったのかselected_categoryに入れる
