@@ -22,13 +22,14 @@
          <!--like-btnと{の間にスペース無いと、like-btnonになってしまう-->
          <!--request.userでログインユーザーを取得可能、post.like.allでいいねしてる全ユーザー取得可能-->
         <button class="like-btn {% if request.user in post.like.all %}on{% endif %}"
-                       data-href="{{ post.get_api_like_url }}" data-id="{{post.pk}}">
+                data-href="{{ post.get_api_like_url }}" data-id="{{post.pk}}">
           <span class="liked-cnt" id="like{{post.pk}}">{{ post.like.count }}</span>
           <i class="fas fa-thumbs-up"></i>
         </button>
-   </div>
+    </div>
   
   {% endfor %}
+
 </div>
 
 <h2><p>⭐︎ 過去にいいねした投稿 ⭐︎</p></h2>
@@ -41,13 +42,10 @@
           <a href="{% url 'blog:detail' post.id %}">{{ post.title }}</a> 
           <p>投稿者：{{ post.accessuser }}</p>
 
-          <!--もしいいねしていたユーザーがログインユーザーだったら、いいねボタンを光らせる。これにより、リロードしたり再度ログイン時、いいねしたボタンは常に光る-->
-          <!--like-btnと{の間にスペース無いと、like-btnonになってしまう-->
-          <!--request.userでログインユーザーを取得可能、post.like.allでいいねしてる全ユーザー取得可能-->
           <button class="like-btn {% if request.user in post.like.all %}on{% endif %}"
-                     data-href="{{ post.get_api_like_url }}" data-id="{{post.pk}}">
-           <span class="liked-cnt" id="like{{post.pk}}">{{ post.like.count }}</span>
-           <i class="fas fa-thumbs-up"></i>
+                  data-href="{{ post.get_api_like_url }}" data-id="{{post.pk}}">
+            <span class="liked-cnt" id="like{{post.pk}}">{{ post.like.count }}</span>
+            <i class="fas fa-thumbs-up"></i>
           </button>
     </div>
   
