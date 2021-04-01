@@ -15,11 +15,11 @@ $(document).on("click",".like-btn", function(e) {
       function(data){
         let change_like = Number(like_cnt.text());
         if (data.liked){　//　もしいいねされていなかったら
-          like_cnt.text(++change_like);　//　いいねの数を１追加
-          this_.addClass("on");　//　ボタンをピンクに
+          $(".like"+data_id).text(++change_like);　//　いいねの数を１追加
+          $(".like"+data_id).parent().addClass("on");　//　ボタンをピンクに
         } else {　　//　もしいいねされていたら
-          like_cnt.text(--change_like);　//　いいねの数を１減らす
-          this_.removeClass("on");　//　ボタンのデザインを初期状態に
+          $(".like"+data_id).text(--change_like);　// いいねの数を１減らす
+          $(".like"+data_id).parent().removeClass("on");;　//　いいねの数を１減らす
         }
       },
       function(error){

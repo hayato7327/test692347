@@ -22,7 +22,7 @@
 
 <button class="like-btn {%if request.user in post.like.all %}on{%endif%}"
         data-href="{{ post.get_api_like_url }}" data-id="{{post.pk}}" style="margin-bottom: 50px; margin-right: 50px;">
-    <span class="liked-cnt" id="like{{post.pk}}">{{ post.like.count }}</span>
+        <span class="liked-cnt like{{post.pk}}" id="like{{post.pk}}">{{ post.like.count }}</span>
     <i class="fas fa-thumbs-up"></i>
 </button>
 
