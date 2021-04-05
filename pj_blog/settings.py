@@ -5,7 +5,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = '&gu!13y)u^5buhjiw15602$g@ufj(eh6s6=b16td+5()gul!&7'
 
- #開発時は常時True 本番公開時は必ずFalse 
+ #開発時は常時True 本番公開時は必ずFalse Trueだとエラー文出るが、Falseだとエラー分を隠した Server Error500表示になる
 DEBUG = False
 
 ALLOWED_HOSTS = ['*']
@@ -54,14 +54,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'pj_blog.wsgi.application'
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+else:
+    import dj_database_url
+    DATABASES = {
+        'default': dj_database_url.config(conn_max_age=600),
+    }
 
-DATABASES['default'] = dj_database_url.config()
 
 AUTH_PASSWORD_VALIDATORS = [
     {

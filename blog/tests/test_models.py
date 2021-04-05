@@ -18,8 +18,7 @@ class PostModelTests(TestCase):
         category.save()
         tag = Tag(name="テストタグ")
         tag.save()
-        post = Post(category=category,title="test_title",
-                    body="test_body", published=1)
+        post = Post(category=category, title="test_title", body="test_body")
         post.save()
         saved_posts = Post.objects.all()
         self.assertEqual(saved_posts.count(), 1)
@@ -32,8 +31,7 @@ class PostModelTests(TestCase):
         category.save()
         tag = Tag(name="テストタグ")
         tag.save()
-        post = Post(category=category,title="test_title",
-                    body="test_body", published=1)
+        post = Post(category=category, title="test_title", body="test_body")
         post.save()
         
         saved_posts = Post.objects.all()
@@ -41,4 +39,3 @@ class PostModelTests(TestCase):
         
         self.assertEqual(actual_post.title, "test_title")
         self.assertEqual(actual_post.body, "test_body")
-        self.assertEqual(actual_post.published, 1)

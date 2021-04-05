@@ -280,6 +280,15 @@ class Test_Login(TestCase):
         self.assertEqual(user.username, "nomura100")
 ```
 
+python manage.py test
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+.........
+----------------------------------------------------------------------
+Ran 9 tests in 13.213s
+
+OK
+
 
 
 6.  ユーザーが探したいブログをすぐ探せたらいいなと思い、さまざまなタイプの検索フォームを実装

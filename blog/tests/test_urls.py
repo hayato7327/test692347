@@ -25,8 +25,7 @@ class TestUrls(TestCase):
         category.save()
         tag = Tag(name="テストタグ")
         tag.save()
-        post = Post(category=category,title="test_title",
-                    body="test_body", published=1)
+        post = Post(category=category, title="test_title", body="test_body")
         post.save()
         
         url = reverse("blog:detail", kwargs={"pk": post.pk})
@@ -54,8 +53,7 @@ class TestUrls(TestCase):
         category.save()
         tag = Tag(name="テストタグ")
         tag.save()
-        post = Post(category=category,title="test_title",
-                    body="test_body", published=1)
+        post = Post(category=category, title="test_title", body="test_body")
         post.save()
         
         url = reverse("blog:update", kwargs={"pk": post.pk})
@@ -73,8 +71,7 @@ class TestUrls(TestCase):
         category.save()
         tag = Tag(name="テストタグ")
         tag.save()
-        post = Post(category=category,title="test_title",
-                    body="test_body", published=1)
+        post = Post(category=category, title="test_title", body="test_body")
         post.save()
         
         url = reverse("blog:delete", kwargs={"pk": post.pk})
