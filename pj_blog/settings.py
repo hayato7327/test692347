@@ -115,8 +115,10 @@ SECURE_SSL_REDIRECT = False
  #会員登録ルールを指定
 AUTH_USER_MODEL = 'registration.User'
 
- #開発用のURLを記載(ターミナルに表示される)
-FRONTEND_URL = 'http://127.0.0.1:8000/'
+if DEBUG:
+    FRONTEND_URL = 'http://127.0.0.1:8000/'
+else:
+    FRONTEND_URL = 'https://blog834.herokuapp.com/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.googlemail.com'

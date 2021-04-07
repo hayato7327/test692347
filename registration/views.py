@@ -17,7 +17,7 @@ class SignUpView(CreateView):
         else:
             return redirect("login")
 
-       # SignUpViewで登録ボタン押した先のページ
+       # SignUpViewで仮登録ボタン押した先のページ
 class SendCompletelyView(TemplateView):
     template_name = "registration/send_completely.html"
 
