@@ -42,7 +42,7 @@ CRUD機能
 
 1.  タップ操作をなるべく減らしてユーザビリティを向上させたいと思い、ページネーションではなく無限スクロールを実装  
 
-`blog/post_list.html`118行目
+`blog/post_list.html`117行目
 
 ```py
 {% block extrajs %}
@@ -126,7 +126,7 @@ def get_queryset(self, request):
 
 4. 投稿編集フォームページはそのブログの投稿者以外が入れたらまずいので、URLを直接指定してくる悪意あるユーザー対策としてセキュリティを強化
 
-`blog/views.py`133行目
+`blog/views.py`131行目
 
 ```py
 #もし投稿者じゃないユーザーがURLを直接指定してきて、投稿者じゃないのに編集画面に入ろうとしたら、悪意あるユーザーと判断し「無効なリンクです」と表示させる
@@ -293,7 +293,7 @@ OK
 
 6.  ユーザーが探したいブログをすぐ探せたらいいなと思い、さまざまなタイプの検索フォームを実装
 
-`blog/views.py`39行目
+`blog/views.py`38行目
 
 get_querysetを使い、ブログの「タイトル、本文」からワード検索
 ```py
@@ -357,13 +357,13 @@ style="position:sticky; top:0
 1.  トップページのカテゴリー検索で、初期値カテゴリーがAだったとして、カテゴリーBを選択して検索すると、検索後のページでプルダウンが初期値のカテゴリーAに戻ってしまう  
      → get_context_data を使って今選択して選んだカテゴリー項目を "selected_category" に保存させ、それをhtmlに記述
 
-`blog/views.py`69行目
+`blog/views.py`67行目
 
 ```py
 context["selected_category"] = (self.request.GET.get("query_cate"))
 ```
 
-`blog/post_list.html`40行目
+`blog/post_list.html`39行目
 
 ```py
 {% if item.id == selected_category %}
@@ -374,7 +374,7 @@ context["selected_category"] = (self.request.GET.get("query_cate"))
 
 2. 　いいねボタン押した状態でリロードすると、いいねしたときに点くcssの色が消えるため、「もし、ログインユーザーがいいねしていたらボタンのcssをオンにする」という記述をしました。  
 
-`blog/post_list.html`93行目
+`blog/post_list.html`92行目
 
 ```py
 <button class="like-btn {% if request.user in post.like.all %}on{% endif %}"
@@ -419,7 +419,7 @@ int() argument must be a string, a bytes-like object or a number, not 'NoneType'
 
 request.GET.getが空の時は、問題のない値0を渡すようにして、変換エラーを回避
 
-`blog/views.py`72行目
+`blog/views.py`70行目
 
 ```py
 context["selected_tag"] = int(self.request.GET.get("query_tag", 0))
@@ -429,7 +429,7 @@ context["selected_tag"] = int(self.request.GET.get("query_tag", 0))
 
 5. テスト実行時、エラー AssertionError: 301 != 200 になる。コードが間違えてると思ったが原因はsettings.pyだった。
 
-`pj_blog/settings.py`105行目
+`pj_blog/settings.py`113行目
 
 ```py
  #Trueでリクエストの全てをhttpsに変える。テスト時はhttp通信のため、Falseにしないとエラーになる
