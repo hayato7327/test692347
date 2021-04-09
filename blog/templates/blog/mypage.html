@@ -19,6 +19,8 @@
           <i class="fas fa-thumbs-up"></i>
         </button>
     </div>
+  {% empty %}
+      <p>まだ投稿はありません。</p>
   {% endfor %}
 </div>
 <h2><p>⭐︎ 過去にいいねした投稿 ⭐︎</p></h2>
@@ -33,6 +35,8 @@
             <i class="fas fa-thumbs-up"></i>
           </button>
     </div>
+  {% empty %}
+      <p>まだ投稿はありません。</p>  
   {% endfor %}
 </div>
 <link rel="stylesheet" type="text/css" href="{% static 'like.css' %}" />
