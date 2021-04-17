@@ -61,7 +61,7 @@ class SignUpForm(UserCreationForm):
         return user # このuserはUserオブジェクト
 
         
-def activate_user(uidb64, token, request):    
+def activate_user(uidb64, token, request):
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
         user = get_user_model().objects.get(pk=uid)

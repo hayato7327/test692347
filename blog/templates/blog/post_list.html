@@ -84,7 +84,7 @@
     {% for post in object_list %}
     <div class="infinite-item">
         <a href="{% url 'blog:detail' post.id %}">{{ post.title }}</a> 
-        <p>投稿者：{{ post.accessuser }} <time style="margin-left: 50px;">{{ post.updated|localtime|localize }}</time></p>
+        <p>投稿者：<a href="{% url 'blog:detail_user' user.id %}">{{ post.accessuser }}</a> <time style="margin-left: 50px;">{{ post.updated|localtime|localize }}</time></p>
 
          <!--もしいいねしていたユーザーがログインユーザーだったら、いいねボタンを光らせる。これにより、リロードしたり再度ログイン時、いいねしたボタンは常に光る-->
          <!--like-btnと{の間にスペース無いと、like-btnonになってしまう-->

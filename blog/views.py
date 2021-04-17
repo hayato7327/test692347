@@ -86,6 +86,11 @@ class Mypage(ListView):
         return context
 
 
+class DetailUser(ListView):
+    model = Post
+    template_name = "blog/detail_user.html"
+
+
 class Detail(DetailView):
     model = Post
 

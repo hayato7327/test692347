@@ -6,7 +6,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '&gu!13y)u^5buhjiw15602$g@ufj(eh6s6=b16td+5()gul!&7'
 
  #開発時は常時True 本番公開時は必ずFalse Trueだとエラー文出るが、Falseだとエラー分を隠した Server Error500表示になる
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -121,8 +121,3 @@ else:
     FRONTEND_URL = 'https://blog834.herokuapp.com/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.googlemail.com'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'yongdouyecun@gmail.com'
-EMAIL_HOST_PASSWORD = 'bwantklkayhaqmjc'

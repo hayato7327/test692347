@@ -12,6 +12,7 @@ urlpatterns = [
     path("change_data", views.change_data, name="change_data"),
     path("comment_create/<int:pk>/", views.CommentCreate.as_view(), name="comment_create"),
     path("detail/<int:pk>/", views.Detail.as_view(), name="detail"),
+    path("detail_user/<int:pk>/", views.DetailUser.as_view(), name="detail_user"),
     path('create/', views.Create.as_view(), name="create"),
     path("update/<int:pk>/", views.Update.as_view(), name="update"),
     path("comment_update/<int:pk>/", views.CommentUpdate.as_view(), name="comment_update"),
